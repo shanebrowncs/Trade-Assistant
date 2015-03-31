@@ -5,6 +5,7 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script src="js/sum.js"></script>
 
+	<link rel="stylesheet" type="text/css" href="layout.css">
 	<link rel="stylesheet" type="text/css" href="index.css" />
 	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 
