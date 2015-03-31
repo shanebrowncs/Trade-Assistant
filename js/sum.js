@@ -44,9 +44,15 @@ function isHighlighted(table, x, y){
 	var table = document.getElementById(table);
 	var style = window.getComputedStyle(table.rows[x].cells[y]);
 
+	console.log("vars: " + table + " " + x + " " + y);
+
 	if(style.getPropertyValue('background-color') != "rgb(48, 48, 48)"){
+		console.log("style: " + style.getPropertyValue('background-color'));
+		console.log("on");
 		return true;
 	}else{
+		console.log("style: " + style.getPropertyValue('background-color'));
+		console.log("off");
 		return false;
 	}
 }
@@ -61,13 +67,14 @@ $(function () {
 
 	    var row = $(this).parent().parent().children().index(this.parentNode);
 	    $(this).toggleClass("highlighted");
-
-      	if(isHighlighted($(this).closest('table').attr('id'), row, column)){
-	        console.log("on");
-	        updateSum($(this).closest('table').attr('id'), true, parseFloat($(this).html().substring(5)));
-	    }else{
+	    if($(this).hasClass("checked")){
+	    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(5, 9)));
+	    	$(this).removeClass("checked");
 	    	console.log("off");
-	    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(5)));
+	    }else{
+	    	updateSum($(this).closest('table').attr('id'), true, parseFloat($(this).html().substring(5, 9)));
+	    	$(this).addClass("checked");
+	    	console.log("on");
 	    }
 	    return false;
   	  }
@@ -82,13 +89,14 @@ $(function () {
 
 		    var row = $(this).parent().parent().children().index(this.parentNode);
 		    $(this).toggleClass("highlighted");
-
-	      	if(isHighlighted($(this).closest('table').attr('id'), row, column)){
-		        console.log("on");
-		        updateSum($(this).closest('table').attr('id'), true, parseFloat($(this).html().substring(5)));
-		    }else{
+		    if($(this).hasClass("checked")){
+		    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(5, 9)));
+		    	$(this).removeClass("checked");
 		    	console.log("off");
-		    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(5)));
+		    }else{
+		    	updateSum($(this).closest('table').attr('id'), true, parseFloat($(this).html().substring(5, 9)));
+		    	$(this).addClass("checked");
+		    	console.log("on");
 		    }
 		    return false;
   	    }
