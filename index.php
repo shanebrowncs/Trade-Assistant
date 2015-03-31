@@ -17,8 +17,8 @@
 <body>
 	<div id="navbar">
 		<a href="help.html">How To</a>
-		<a href="#">Item Calculator</a>
 		<a href="#">Settings</a>
+		<a href="#">Item Calculator</a>
 		<a href="index.php">Home</a>
 	</div>
 
