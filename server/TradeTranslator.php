@@ -15,11 +15,11 @@ function getTrade($url){
 		$items = array();
 
 		foreach($leftNode as $node){
-			$items[0][] = html_entity_decode($node->nodeValue);
+			$items[0][] = utf8_decode($node->nodeValue);
 		}
 
 		foreach($rightNode as $node){
-			$items[1][] = html_entity_decode($node->nodeValue);
+			$items[1][] = utf8_decode($node->nodeValue);
 		}
 
 	}else{
