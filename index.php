@@ -57,14 +57,14 @@ function handleTrade($url, $host, $db, $user, $pass){
 		$leftItem = fetchSqlData($multiArray[0][$i], $host, $db, $user, $pass);
 
 		if($leftItem === FALSE){
-			echo '<script>console.log("Manually Grabbing: ' . $multiArray[1][$i] . '");</script>';
+			echo '<script>console.log("Manually Grabbing: ' . $multiArray[0][$i] . '");</script>';
 			$leftItem = new stdClass();
 			$leftItem->curPrice = getItemCurrentPrice($multiArray[0][$i]);
 			$leftItem->medPrice = getItemMedianPrice($multiArray[0][$i]);
 			$leftItem->taxPrice = $leftItem->curPrice - ($leftItem->curPrice * 0.15);
 			$leftItem->volume = floatval(str_replace(",", "", getItemVolume($multiArray[0][$i])));
 		}else{
-			echo '<script>console.log("SQL Grabbing: ' . $multiArray[1][$i] . '");</script>';
+			echo '<script>console.log("SQL Grabbing: ' . $multiArray[0][$i] . '");</script>';
 		}
 
 		echo '<tr><td>' . $multiArray[0][$i] . '</td><td>CDN$ ' . number_format($leftItem->curPrice, 2) . '</td><td>CDN$ ' . number_format($leftItem->medPrice, 2) . '</td><td>CDN$ ' . number_format($leftItem->taxPrice, 2) . '</td><td>' . $leftItem->volume . '</td></tr>';
