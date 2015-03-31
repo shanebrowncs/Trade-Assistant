@@ -35,6 +35,9 @@ table td.highlighted{
 	background-color: #737373;
 }
 
+#left .ui-selected { background: red;}
+#left .ui-selecting { background: #666; }
+
 /* WHITE TEXT */
 
 h1{
