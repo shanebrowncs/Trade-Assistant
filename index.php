@@ -7,7 +7,7 @@
 
 	<link rel="stylesheet" type="text/css" href="layout.css">
 	<link rel="stylesheet" type="text/css" href="index.css" />
-	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
+	<link rel="icon" type="image/png" href="/images/favicon.png" />
 
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
