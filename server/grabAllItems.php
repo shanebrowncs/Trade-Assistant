@@ -13,26 +13,31 @@
 
 <?php
 
-function getItemCurrentPrice($item){
+function getPriceJSONFromServer($item){
 	$item = str_replace(" ", "%20", $item);
+	if(substr($item, 0, 8) === "Souvenir")
+		return FALSE;
 	$raw = file_get_contents("http://steamcommunity.com/market/priceoverview/?country=US&currency=20&appid=730&market_hash_name=" . $item);
 	if($raw === FALSE){
-		return 0.0;
+		return FALSE;
 	}
-	$json = json_decode($raw);
+	return $raw;
+}
+
+function getItemCurrentPrice($jsonRaw){
+	$json = json_decode($jsonRaw);
 	if($json === NULL){
 		return 0.0;
 	}
 	if(!isset($json->lowest_price)){
 		return 0.0;
 	}
-	//return floatval(preg_replace("[^\d.]", "", $json->lowest_price));
+	
 	return floatval(substr($json->lowest_price, 9));
 }
 
-function getItemMedianPrice($item){
-	if(substr($item, 0, 8) === "Souvenir")
-		return 0.0;
+function getItemMedianPrice($jsonRaw){
+
 
 	$item = str_replace(" ", "%20", $item);
 	$raw = file_get_contents("http://steamcommunity.com/market/priceoverview/?country=US&currency=20&appid=730&market_hash_name=" . $item);
@@ -86,7 +91,7 @@ function get_url_contents($url){
 
 function readMarketPage($pageNum){
 	echo 'Page Query: http://steamcommunity.com/market/search/render/?query=&start=' . $pageNum * 100 . '&count=100&search_descriptions=0&sort_column=name&sort_dir=asc&appid=730';
-	
+
 	$json = json_decode(get_url_contents("http://steamcommunity.com/market/search/render/?query=&start=" . $pageNum * 100 . "&count=100&search_descriptions=0&sort_column=name&sort_dir=asc&appid=730"), true);
 
 	while($json["success"] != true){
@@ -151,13 +156,13 @@ function addItemToDatabase($item, $host, $db, $user, $pass){
 		if(count($rows) > 0){
 			echo 'Updating ' . $item->name . "<br />";
 			echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
-			
+
 			$updateQuery = "UPDATE `items` SET `current`='" . $item->curPrice . "', `median`='" . $item->medPrice . "', `market`='" . $item->taxPrice . "', `volume`='" . $item->volume . "' WHERE `name`='" . str_replace("'", "\'", $item->name) . "'";
 			$updateResult = mysqli_query($sqlConn, $updateQuery);
 			if($updateResult === FALSE){
 				echo "<br />" . mysqli_error($sqlConn) . "<br />";
 			}
-			
+
 		}else{
 			echo 'Inserting ' . $item->name . "<br />";
 			echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
@@ -175,6 +180,8 @@ function grabItemValue($item){
 	$obj->name = $item;
 	echo 'Grabbing Data for ' . $obj->name . "<br />";
 	echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
+	$itemJSON = getPriceJSONFromServer($obj->name);
+
 	$obj->curPrice = getItemCurrentPrice($obj->name);
 	$obj->medPrice = getItemMedianPrice($obj->name);
 	$obj->taxPrice = $obj->curPrice - ($obj->curPrice * 0.15);
