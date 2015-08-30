@@ -19,12 +19,14 @@
 <body>
     <h1>Trade Assistant Setup</h1>
     <p>Welcome to the trade assistant setup. The trade assistant will run as-is without the need to run this setup. The benefit of the setup is database integration of the trade assist making the user's experience much faster. Start by entering the user and password you want the Trade Assistant to use to setup the database. You can optionally specify a name for the database. Otherwise the default name 'tradeassist' will be used.</p>
-    <form action="setup.php" method="POST">
+    <form action="setup.php" method='POST'>
+        <span>MySQL Host( If you don't know what this is it is likely <b>localhost</b> ):</span><br/>
+        <input name="host" type="text"/><br/>
         <span>MySQL User:</span><br/>
         <input name="user" type="text"/>
         <br/><span>MySQL Password:</span><br/>
         <input name="pass" type="password"/><br/>
-        <br/><span>Re-enter Password:</span><br/>
+        <span>Re-enter Password:</span><br/>
         <input name="pass_confirm" type="password"/><br/>
         <span>Database Name(Optional):</span><br/>
         <input name="db" type="text"/><br/><br/>
@@ -33,40 +35,81 @@
 </body>
 
 <?php
-    function checkForMissedFields(){
-        missedFields = "";
-        if(!isset($_POST['user'])){
-            missedFields += "User\n";
-        }
-        if(!isset($_POST['pass'])){
-            missedFields += "Password\n";
-        }
-        if(!isset($_POST['pass_confirm'])){
-            missedFields += "Password Confirmation\n";
-        }
 
-        // Return
-        if(strlen(missedFields) > 0){
-            return missedFields;
-        }
+    function connectToSQL($host, $user, $password){
+        $sqlConn = mysqli_connect($host, $user, $password);
+        echo "<p>" . $host . " " . $user . " " . $password . "</p>";
 
-        return TRUE;
+        if(mysqli_connect_error()){
+            echo "<p>Error connecting to MySQL: " . mysqli_connect_errno() . " : " . mysqli_connect_error() . "</p>";
+            return false;
+        }
+        return $sqlConn;
     }
 
-    missedFields = checkForMissedFields();
+    function populateSQL($sqlConn, $db){
+        $dbQuery = "CREATE DATABASE " . $db;
+        if(!mysqli_query($sqlConn, $dbQuery)){
+            echo 'MySQL Error: ' . mysqli_error($sqlConn);
+            return false;
+        }
 
-    if(missedFields != TRUE){
-        echo "Fields Missed:\n" . missedFields;
+        echo '<p>Database Created.</p>';
+
+        // Select DB before creating table
+        mysqli_select_db($db, $sqlConn);
+
+        $tableQuery = "CREATE TABLE items(
+            name VARCHAR(50) NOT NULL,
+            current DOUBLE(5) NOT NULL,
+            median DOUBLE(5) NOT NULL,
+            market DOUBLE(5) NOT NULL,
+            volume INT(11) NOT NULL
+        )";
+
+        if(!mysqli_query($sqlConn, $tableQuery)){
+            echo 'MySQL Error: ' . mysqli_error($sqlConn);
+            return false;
+        }
+
+        echo '<p>';
+
+        return true;
     }
 
-    user = $_POST['user'];
-    password = $_POST['pass'];
-    password_confirm = $_POST['pass_confirm'];
+    // User hasn't entered values yet
+    if(!isset($_POST['user'])){
+        return;
+    }
 
-    if(isset($_POST['db'])){
-        db = $_POST['db'];
+    if(empty($_POST['pass']) || empty($_POST['pass_confirm']) || empty($_POST['host'])){
+        echo "<p>Field/s Empty. Please ensure to fill out the whole form.</p>";
+        return;
+    }
+
+    $host = $_POST['host'];
+    $user = $_POST['user'];
+    $password = $_POST['pass'];
+    $password_confirm = $_POST['pass_confirm'];
+
+    if(!empty($_POST['db'])){
+        $db = $_POST['db'];
     }else{
-        
+        $db = "tradeassist";
     }
+
+    if(strcmp($password, $password_confirm) !== 0){
+        echo "<p>Passwords do not match.</p>";
+        return;
+    }
+
+    $sqlConn = connectToSQL($host, $user, $password);
+    if($sqlConn == FALSE){
+        return;
+    }
+
+    echo "<p>Success! You can now close this page and delete this file.</p>";
+
+
 
 ?>
