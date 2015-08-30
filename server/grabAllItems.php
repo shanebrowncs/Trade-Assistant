@@ -32,19 +32,12 @@ function getItemCurrentPrice($jsonRaw){
 	if(!isset($json->lowest_price)){
 		return 0.0;
 	}
-	
+
 	return floatval(substr($json->lowest_price, 9));
 }
 
 function getItemMedianPrice($jsonRaw){
-
-
-	$item = str_replace(" ", "%20", $item);
-	$raw = file_get_contents("http://steamcommunity.com/market/priceoverview/?country=US&currency=20&appid=730&market_hash_name=" . $item);
-	if($raw === FALSE){
-		return 0.0;
-	}
-	$json = json_decode($raw);
+	$json = json_decode($jsonRaw);
 	if($json === NULL){
 		return 0.0;
 	}
@@ -57,16 +50,8 @@ function getItemMedianPrice($jsonRaw){
 	return floatval(substr($json->median_price, 9));
 }
 
-function getItemVolume($item){
-	if(substr($item, 0, 8) === "Souvenir")
-		return 0;
-
-	$item = str_replace(" ", "%20", $item);
-	$raw = file_get_contents("http://steamcommunity.com/market/priceoverview/?country=US&currency=20&appid=730&market_hash_name=" . $item);
-	if($raw === FALSE){
-		return 0;
-	}
-	$json = json_decode($raw);
+function getItemVolume($jsonRaw){
+	$json = json_decode($jsonRaw);
 	if($json === NULL){
 		return 0;
 	}
@@ -180,12 +165,17 @@ function grabItemValue($item){
 	$obj->name = $item;
 	echo 'Grabbing Data for ' . $obj->name . "<br />";
 	echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
-	$itemJSON = getPriceJSONFromServer($obj->name);
-
-	$obj->curPrice = getItemCurrentPrice($obj->name);
-	$obj->medPrice = getItemMedianPrice($obj->name);
-	$obj->taxPrice = $obj->curPrice - ($obj->curPrice * 0.15);
-	$obj->volume = getItemVolume($obj->name);
+	if(($itemJSON = getPriceJSONFromServer($obj->name)) != FALSE){
+		$obj->curPrice = getItemCurrentPrice($itemJSON);
+		$obj->medPrice = getItemMedianPrice($itemJSON);
+		$obj->taxPrice = $obj->curPrice - ($obj->curPrice * 0.15);
+		$obj->volume = getItemVolume($itemJSON);
+	}else{
+		$obj->curPrice = 0.0;
+		$obj->medPrice = 0.0;
+		$obj->taxPrice = 0.0;
+		$obj->volume = 0;
+	}
 
 	return $obj;
 }
