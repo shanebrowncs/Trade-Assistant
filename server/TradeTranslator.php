@@ -2,7 +2,7 @@
 
 function getTrade($url){
 	$data = file_get_contents(str_replace("https", "http", $url));
-	
+
 	if($data !== FALSE){
 		@$dom = new DomDocument();
 		@$dom->loadHTML($data);
