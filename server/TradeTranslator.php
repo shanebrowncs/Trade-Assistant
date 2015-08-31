@@ -43,7 +43,7 @@ function getItemCurrentPrice($item){
 		return 0.0;
 	}
 	//return floatval(preg_replace("[^\d.]", "", $json->lowest_price));
-	return floatval(substr($json->lowest_price, 9));
+	return floatval(substr($json->lowest_price, 5));
 }
 
 function getItemMedianPrice($item){
@@ -65,7 +65,7 @@ function getItemMedianPrice($item){
 	}
 
 	//return floatval(preg_replace("[^\d.]", "", $json->median_price));
-	return floatval(substr($json->median_price, 9));
+	return floatval(substr($json->median_price, 5));
 }
 
 function getItemVolume($item){

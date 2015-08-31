@@ -26,7 +26,7 @@
 
 	<a href="?"><h1>Trade Assistant</h1></a>
 	<p id="credit">Created by <a href="http://shane-brown.ca/" target="_blank">Shane "SajeOne" Brown</a><br /></p>
-	
+
 	<form>
 		<p>Enter Trade or Inventory URL:</p><br />
 		<input id="textview" type="text" name="url"/>
@@ -68,7 +68,7 @@ function handleTrade($url, $host, $db, $user, $pass){
 		}
 
 		echo '<tr><td>' . $multiArray[0][$i] . '</td><td>CDN$ ' . number_format($leftItem->curPrice, 2) . '</td><td>CDN$ ' . number_format($leftItem->medPrice, 2) . '</td><td>CDN$ ' . number_format($leftItem->taxPrice, 2) . '</td><td>' . $leftItem->volume . '</td></tr>';
-		
+
 		$total[0] += $leftItem->curPrice;
 		$total[1] += $leftItem->medPrice;
 		$total[2] += $leftItem->taxPrice;
@@ -224,7 +224,7 @@ if(isset($_GET['url'])){
 		}else{
 			echo 'Malformed URL';
 		}
-		
+
 	}else{
 		echo 'Malformed URL';
 	}
