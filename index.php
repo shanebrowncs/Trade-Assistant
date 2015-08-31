@@ -59,10 +59,10 @@ function handleTrade($url, $host, $db, $user, $pass){
 		if($leftItem === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $multiArray[0][$i] . '");</script>';
 			$leftItem = new stdClass();
-			$leftItem->curPrice = getItemCurrentPrice($multiArray[0][$i]);
-			$leftItem->medPrice = getItemMedianPrice($multiArray[0][$i]);
+			$leftItem->curPrice = TradeTranslator::getItemCurrentPrice($multiArray[0][$i]);
+			$leftItem->medPrice = TradeTranslator::getItemMedianPrice($multiArray[0][$i]);
 			$leftItem->taxPrice = $leftItem->curPrice - ($leftItem->curPrice * 0.15);
-			$leftItem->volume = floatval(str_replace(",", "", getItemVolume($multiArray[0][$i])));
+			$leftItem->volume = floatval(str_replace(",", "", TradeTranslator::getItemVolume($multiArray[0][$i])));
 		}else{
 			echo '<script>console.log("SQL Grabbing: ' . $multiArray[0][$i] . '");</script>';
 		}
@@ -89,10 +89,10 @@ function handleTrade($url, $host, $db, $user, $pass){
 		if($rightItem === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $multiArray[1][$i] . '");</script>';
 			$rightItem = new stdClass();
-			$rightItem->curPrice = getItemCurrentPrice($multiArray[1][$i]);
-			$rightItem->medPrice = getItemMedianPrice($multiArray[1][$i]);
+			$rightItem->curPrice = TradeTranslator::getItemCurrentPrice($multiArray[1][$i]);
+			$rightItem->medPrice = TradeTranslator::getItemMedianPrice($multiArray[1][$i]);
 			$rightItem->taxPrice = $rightItem->curPrice - ($rightItem->curPrice * 0.15);
-			$rightItem->volume = floatval(str_replace(",", "", getItemVolume($multiArray[1][$i])));
+			$rightItem->volume = floatval(str_replace(",", "", TradeTranslator::getItemVolume($multiArray[1][$i])));
 		}else{
 			echo '<script>console.log("SQL Grabbing: ' . $multiArray[1][$i] . '");</script>';
 		}
@@ -116,8 +116,8 @@ function handleTrade($url, $host, $db, $user, $pass){
 }
 
 function handleInventory($url, $host, $db, $user, $pass){
-	$itemArray = getInventory($url, $host, $db, $user, $pass);
-	$name = getSteamName($url);
+	$itemArray = InventoryTranslator::getInventory($url, $host, $db, $user, $pass);
+	$name = InventoryTranslator::getSteamName($url);
 	if($itemArray === FALSE){
 		echo 'Failed to fetch inventory';
 		return;
@@ -138,10 +138,10 @@ function handleInventory($url, $host, $db, $user, $pass){
 		if($item === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $itemArray[$i]->name . '");</script>';
 			$item = new stdClass();
-			$item->curPrice = getItemCurrentPrice($itemArray[$i]->name);
-			$item->medPrice = getItemMedianPrice($itemArray[$i]->name);
+			$item->curPrice = TradeTranslator::getItemCurrentPrice($itemArray[$i]->name);
+			$item->medPrice = TradeTranslator::getItemMedianPrice($itemArray[$i]->name);
 			$item->taxPrice = $item->curPrice - ($item->curPrice * 0.15);
-			$item->volume = floatval(str_replace(",", "", getItemVolume($itemArray[$i]->name)));
+			$item->volume = floatval(str_replace(",", "", TradeTranslator::getItemVolume($itemArray[$i]->name)));
 		}else{
 			echo '<script>console.log("SQL Grabbing: ' . $itemArray[$i]->name . '");</script>';
 		}
