@@ -1,11 +1,12 @@
 input{
-	margin: 5px;
+	width: 15%;
 }
 
 table{
 	background-color: #1A1A1A;
 	margin-bottom: 30px;
-	float:right;
+	position: relative;
+	z-index: 10;
 }
 
 table td{
@@ -18,22 +19,24 @@ table td.highlighted{
 	background-color: #737373;
 }
 
+/*#table_container{
+	position: relative;
+	z-index: 10;
+}*/
 
-#addBtn{
-	float:left;
-	width: 3em;
-	height: inherit;
-	margin: 3px;
-	display: block;
-
-	-webkit-transition: all 1s linear;
-    -o-transition: all 1s linear;
-    -moz-transition: all 1s linear;
-    -ms-transition: all 1s linear;
-    -kthtml-transition: all 1s linear;
-    transition: all 1s linear;
+#result{
+	color: #303030;
+	border: 1px solid #1A1A1A;
+	display: table;
+	position: absolute;
 }
 
-#addBtn:hover{
-	background-image: url("images/plus_hover.png");
+.item{
+	padding: 3px;
+	border: 1px solid #1A1A1A;
+	background-color: #303030;
+}
+
+.item:hover{
+	cursor: pointer;
 }

@@ -11,13 +11,14 @@
 	<link rel="stylesheet" type="text/css" href="calculator.css" />
 	<link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta content="utf-8" http-equiv="encoding">
 	<title>Trade Assistant</title>
 </head>
 
 <body>
 	<div id="navbar">
 		<a href="help.html">How To</a>
-		<a href="#">Item Calculator</a>
+		<a href="calculator.html">Item Calculator</a>
 		<a href="#">Settings</a>
 		<a href="index.php">Home</a>
 	</div>
@@ -27,12 +28,17 @@
 
 	<div id="page_content">
 		<h2 id="trader">Trader's Items:</h2> <br />
-			<label for="autocomplete">Search: </label>
-			<input id="autocomplete"/>
+		<label for="autocomplete">Search: <br /></label>
+		<input id="autocomplete"/>
+		<div id="result">
+
+		</div>
+		<div id="table_container">
 			<table id="left" style="width: 100%;">
 				<tr><td>Item Name:</td><td>Current Price:</td><td>Median Price:</td><td>Market Worth:</td><td>Volume:</td></tr>
 				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
 			</table>
+		</div>
 	</div>
 </body>
 
