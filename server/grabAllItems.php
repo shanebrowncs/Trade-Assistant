@@ -1,54 +1,17 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+	<title>Title</title>
+</head>
+
+<body>
+
+</body>
+
+</html>
+
 <?php
-
-function getPriceJSONFromServer($item){
-	$item = str_replace(" ", "%20", $item);
-	if(substr($item, 0, 8) === "Souvenir")
-		return FALSE;
-	$raw = file_get_contents("http://steamcommunity.com/market/priceoverview/?country=US&currency=20&appid=730&market_hash_name=" . $item);
-	if($raw === FALSE){
-		return FALSE;
-	}
-	return $raw;
-}
-
-function getItemCurrentPrice($jsonRaw){
-	$json = json_decode($jsonRaw);
-	if($json === NULL){
-		return 0.0;
-	}
-	if(!isset($json->lowest_price)){
-		return 0.0;
-	}
-
-	return floatval(substr($json->lowest_price, 5));
-}
-
-function getItemMedianPrice($jsonRaw){
-	$json = json_decode($jsonRaw);
-	if($json === NULL){
-		return 0.0;
-	}
-
-	if(!isset($json->median_price)){
-		return 0.0;
-	}
-
-	//return floatval(preg_replace("[^\d.]", "", $json->median_price));
-	return floatval(substr($json->median_price, 5));
-}
-
-function getItemVolume($jsonRaw){
-	$json = json_decode($jsonRaw);
-	if($json === NULL){
-		return 0;
-	}
-
-	if(!isset($json->volume)){
-		return 0;
-	}
-
-	return floatval(str_replace(",", "", $json->volume));
-}
 
 function get_url_contents($url){
         $crl = curl_init();
@@ -81,12 +44,6 @@ function readMarketPage($pageNum){
 	$itemResult = $dom->getElementById('result_0_name');
 
 	$itemArray = array();
-
-	if(function_exists('$dom->getElementbyId')){
-		echo "function exists";
-	}else{
-		echo "function doesn't exist";
-	}
 
 	if($itemResult === NULL){
 		echo "Couldn't get first element, num = " . $pageNum . "itemResult: " . $itemResult;
@@ -152,11 +109,11 @@ function grabItemValue($item){
 	$obj->name = $item;
 	echo 'Grabbing Data for ' . $obj->name . "<br />";
 	echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
-	if(($itemJSON = getPriceJSONFromServer($obj->name)) != FALSE){
-		$obj->curPrice = getItemCurrentPrice($itemJSON);
-		$obj->medPrice = getItemMedianPrice($itemJSON);
+	if(($itemJSON = TradeTranslator::getItemJSON($obj->name)) != FALSE){
+		$obj->curPrice = TradeTranslator::getItemCurrentPrice($itemJSON);
+		$obj->medPrice = TradeTranslator::getItemMedianPrice($itemJSON);
 		$obj->taxPrice = $obj->curPrice - ($obj->curPrice * 0.15);
-		$obj->volume = getItemVolume($itemJSON);
+		$obj->volume = TradeTranslator::getItemVolume($itemJSON);
 	}else{
 		$obj->curPrice = 0.0;
 		$obj->medPrice = 0.0;
@@ -167,20 +124,8 @@ function grabItemValue($item){
 	return $obj;
 }
 
-function readSettingsFile($filePath){
-	if((@$settings = parse_ini_file($filePath, TRUE)) === FALSE) {
-		$data = FALSE;
-	}else{
-		$data = new stdClass();
-
-		$data->host = $settings['database']['host'];
-		$data->db = $settings['database']['db'];
-		$data->user = $settings['database']['user'];
-		$data->pass = $settings['database']['pass'];
-	}
-
-	return $data;
-}
+require 'TradeTranslator.php';
+require 'AssistantUtility.php';
 
 ini_set('display_errors',1);
 error_reporting(E_ALL);
@@ -190,7 +135,7 @@ $time_pre = microtime(true);
 
 $dataArray = array();
 
-$sqlData = readSettingsFile("../settings.ini");
+$sqlData = AssistantUtility::readSettingsFile("../settings.ini");
 if($sqlData === FALSE){
 	$sqlData = new stdClass();
 
@@ -215,29 +160,6 @@ while(TRUE){
 	$count++;
 }
 
-if(FALSE){
-	$temp = readMarketPage(0);
+echo "\nTime: " . $microtime(true) - $time_pre;
 
-	if($temp === FALSE){
-		break;
-	}
-
-	$name = $temp[1];
-
-
-	$nameArray = array();
-	$nameArray[] = $name;
-	$data = grabAllItemValues($nameArray);
-	echo "Grabbed Data For: " . $name . "<br />";
-	echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
-
-
-	addArrayToDatabase($data);
-	echo '<br />Added:<br /> ' . $data[0]->name . "<br />Current: " . $data[0]->curPrice . "<br />Median: " . $data[0]->medPrice . "<br />Tax Price: " . $data[0]->taxPrice . "<br />Volume: " . $data[0]->volume . "<br />";
-	echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
-}
-
-$time_post = microtime(true);
-
-echo "Time: " . date("H:i:s",$time_post - $time_pre);
 ?>

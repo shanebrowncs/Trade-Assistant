@@ -1,20 +1,5 @@
 <?php
 class InventoryTranslator{
-	function getInventory($url){
-		@$data = file_get_contents($url . "?xml=1");
-	    if($data !== FALSE){
-	    	$xml = simplexml_load_string($data);
-	    	if($xml !== FALSE){
-	    		$steamID64 = $xml->steamID64;
-	    		return retrieveInventory($steamID64);
-	    	}else{
-	    		return false;
-	    	}
-	    }else{
-	        return false;
-	    }
-	}
-
 	function getSteamName($url){
 	    $data = file_get_contents($url . "?xml=1");
 	    $xml = simplexml_load_string($data);
@@ -45,6 +30,21 @@ class InventoryTranslator{
 			}
 
 		}else{
+	        return false;
+	    }
+	}
+
+	function getInventory($url){
+		@$data = file_get_contents($url . "?xml=1");
+	    if($data !== FALSE){
+	    	$xml = simplexml_load_string($data);
+	    	if($xml !== FALSE){
+	    		$steamID64 = $xml->steamID64;
+	    		return InventoryTranslator::retrieveInventory($steamID64);
+	    	}else{
+	    		return false;
+	    	}
+	    }else{
 	        return false;
 	    }
 	}

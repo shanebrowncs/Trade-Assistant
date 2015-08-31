@@ -25,6 +25,9 @@
 	</div>
 
 	<a href="?"><h1>Trade Assistant</h1></a>
+
+	<!-- This Credit is a little obnoxious I know, feel free to remove it.
+		I would appreciate if you could credit me somewhere but it's not required as long as you do not claim my work is your own. -->
 	<p id="credit">Created by <a href="http://shane-brown.ca/" target="_blank">Shane "SajeOne" Brown</a><br /></p>
 
 	<form>
@@ -40,7 +43,7 @@
 <?php
 
 function handleTrade($url, $host, $db, $user, $pass){
-	$multiArray = getTrade($_GET["url"]);
+	$multiArray = TradeTranslator::getTrade($_GET["url"]);
 	if($multiArray === FALSE){
 		echo 'Failed to fetch trade.';
 		return;
@@ -56,7 +59,7 @@ function handleTrade($url, $host, $db, $user, $pass){
 
 		if($leftItem === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $multiArray[0][$i] . '");</script>';
-			$leftItemJSON = TradeTranslator::getleftItemJSON($multiArray[0][$i]);
+			$leftItemJSON = TradeTranslator::getItemJSON($multiArray[0][$i]);
 			$leftItem = new stdClass();
 			if($leftItemJSON != FALSE){
 				$leftItem->curPrice = TradeTranslator::getItemCurrentPrice($leftItemJSON);
@@ -156,10 +159,19 @@ function handleInventory($url, $host, $db, $user, $pass){
 		if($item === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $itemArray[$i]->name . '");</script>';
 			$item = new stdClass();
-			$item->curPrice = TradeTranslator::getItemCurrentPrice($itemArray[$i]->name);
-			$item->medPrice = TradeTranslator::getItemMedianPrice($itemArray[$i]->name);
-			$item->taxPrice = $item->curPrice - ($item->curPrice * 0.15);
-			$item->volume = floatval(str_replace(",", "", TradeTranslator::getItemVolume($itemArray[$i]->name)));
+			if(($itemJSON = TradeTranslator::getItemJSON($itemArray[$i]->name)) != FALSE){
+				$item->curPrice = TradeTranslator::getItemCurrentPrice($itemJSON);
+				$item->medPrice = TradeTranslator::getItemMedianPrice($itemJSON);
+				$item->taxPrice = $item->curPrice - ($item->curPrice * 0.15);
+				$item->volume = floatval(str_replace(",", "", TradeTranslator::getItemVolume($itemJSON)));
+			}else{
+				$item->curPrice = 0.0;
+				$item->medPrice = 0.0;
+				$item->taxPrice = 0.0;
+				$item->volume = 0.0;
+			}
+
+
 		}else{
 			echo '<script>console.log("SQL Grabbing: ' . $itemArray[$i]->name . '");</script>';
 		}
