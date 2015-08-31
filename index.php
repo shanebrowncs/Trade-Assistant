@@ -38,8 +38,6 @@
 </html>
 
 <?php
-require 'server/InventoryTranslator.php';
-require 'server/TradeTranslator.php';
 
 function handleTrade($url, $host, $db, $user, $pass){
 	$multiArray = getTrade($_GET["url"]);
@@ -58,11 +56,21 @@ function handleTrade($url, $host, $db, $user, $pass){
 
 		if($leftItem === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $multiArray[0][$i] . '");</script>';
+			$leftItemJSON = TradeTranslator::getleftItemJSON($multiArray[0][$i]);
 			$leftItem = new stdClass();
-			$leftItem->curPrice = TradeTranslator::getItemCurrentPrice($multiArray[0][$i]);
-			$leftItem->medPrice = TradeTranslator::getItemMedianPrice($multiArray[0][$i]);
-			$leftItem->taxPrice = $leftItem->curPrice - ($leftItem->curPrice * 0.15);
-			$leftItem->volume = floatval(str_replace(",", "", TradeTranslator::getItemVolume($multiArray[0][$i])));
+			if($leftItemJSON != FALSE){
+				$leftItem->curPrice = TradeTranslator::getItemCurrentPrice($leftItemJSON);
+				$leftItem->medPrice = TradeTranslator::getItemMedianPrice($leftItemJSON);
+				$leftItem->taxPrice = $leftItem->curPrice - ($leftItem->curPrice * 0.15);
+				$leftItem->volume = floatval(str_replace(",", "", TradeTranslator::getItemVolume($leftItemJSON)));
+			}else{
+				$leftItem->curPrice = 0.0;
+				$leftItem->medPrice = 0.0;
+				$leftItem->taxPrice = 0.0;
+				$leftItem->volume = 0;
+			}
+
+
 		}else{
 			echo '<script>console.log("SQL Grabbing: ' . $multiArray[0][$i] . '");</script>';
 		}
@@ -88,11 +96,21 @@ function handleTrade($url, $host, $db, $user, $pass){
 
 		if($rightItem === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $multiArray[1][$i] . '");</script>';
+			$rightItemJSON = TradeTranslator::getItemJSON($multiArray[1][$i]);
 			$rightItem = new stdClass();
-			$rightItem->curPrice = TradeTranslator::getItemCurrentPrice($multiArray[1][$i]);
-			$rightItem->medPrice = TradeTranslator::getItemMedianPrice($multiArray[1][$i]);
-			$rightItem->taxPrice = $rightItem->curPrice - ($rightItem->curPrice * 0.15);
-			$rightItem->volume = floatval(str_replace(",", "", TradeTranslator::getItemVolume($multiArray[1][$i])));
+			if($rightItemJSON != FALSE){
+				$rightItem->curPrice = TradeTranslator::getItemCurrentPrice($rightItemJSON);
+				$rightItem->medPrice = TradeTranslator::getItemMedianPrice($rightItemJSON);
+				$rightItem->taxPrice = $rightItem->curPrice - ($rightItem->curPrice * 0.15);
+				$rightItem->volume = floatval(str_replace(",", "", TradeTranslator::getItemVolume($rightItemJSON)));
+			}else{
+				$rightItem->curPrice = 0.0;
+				$rightItem->medPrice = 0.0;
+				$rightItem->taxPrice = 0.0;
+				$rightItem->volume = 0;
+			}
+
+
 		}else{
 			echo '<script>console.log("SQL Grabbing: ' . $multiArray[1][$i] . '");</script>';
 		}
@@ -183,28 +201,17 @@ function fetchSqlData($item, $host, $db, $user, $pass){
 
 }
 
-function readSettingsFile($filePath){
-	if((@$settings = parse_ini_file($filePath, TRUE)) === FALSE) {
-		$data = FALSE;
-	}else{
-		$data = new stdClass();
-
-		$data->host = $settings['database']['host'];
-		$data->db = $settings['database']['db'];
-		$data->user = $settings['database']['user'];
-		$data->pass = $settings['database']['pass'];
-	}
-
-	return $data;
-}
-
 /* START OF PROGRAM FLOW */
 
+require 'server/InventoryTranslator.php';
+require 'server/TradeTranslator.php';
+require 'server/AssistantUtility.php';
 
-$sqlData = readSettingsFile("settings.ini");
+$sqlData = AssistantUtility::readSettingsFile("settings.ini");
 if($sqlData === FALSE){
 	$sqlData = new stdClass();
 
+	// Default values, manual fetching will still work
 	$sqlData->host = "localhost";
 	$sqlData->db = "csgo";
 	$sqlData->user = "user";

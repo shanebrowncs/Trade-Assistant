@@ -39,12 +39,7 @@ class TradeTranslator{
 		return $raw;
 	}
 
-	public static function getItemCurrentPrice($item){
-		$item = str_replace(" ", "%20", $item);
-		@$raw = file_get_contents("http://steamcommunity.com/market/priceoverview/?country=US&currency=20&appid=730&market_hash_name=" . $item);
-		if($raw === FALSE){
-			return 0.0;
-		}
+	public static function getItemCurrentPrice($raw){
 		$json = json_decode($raw);
 		if($json === NULL){
 			return 0.0;
@@ -55,15 +50,7 @@ class TradeTranslator{
 		return floatval(substr($json->lowest_price, 5));
 	}
 
-	public static function getItemMedianPrice($item){
-		if(substr($item, 0, 8) === "Souvenir")
-			return 0.0;
-
-		$item = str_replace(" ", "%20", $item);
-		@$raw = file_get_contents("http://steamcommunity.com/market/priceoverview/?country=US&currency=20&appid=730&market_hash_name=" . $item);
-		if($raw === FALSE){
-			return 0.0;
-		}
+	public static function getItemMedianPrice($raw){
 		$json = json_decode($raw);
 		if($json === NULL){
 			return 0.0;
@@ -71,29 +58,14 @@ class TradeTranslator{
 			return 0.0;
 		}
 
-		if(!isset($json->median_price)){
-			return 0.0;
-		}
-
-		//return floatval(preg_replace("[^\d.]", "", $json->median_price));
 		return floatval(substr($json->median_price, 5));
 	}
 
-	public static function getItemVolume($item){
-		if(substr($item, 0, 8) === "Souvenir")
-			return 0;
-
-		$item = str_replace(" ", "%20", $item);
-		@$raw = file_get_contents("http://steamcommunity.com/market/priceoverview/?country=US&currency=20&appid=730&market_hash_name=" . $item);
-		if($raw === FALSE){
-			return 0;
-		}
+	public static function getItemVolume($raw){
 		$json = json_decode($raw);
 		if($json === NULL){
 			return 0;
-		}
-
-		if(!isset($json->volume)){
+		}else if(!isset($json->volume)){
 			return 0;
 		}
 
@@ -101,3 +73,4 @@ class TradeTranslator{
 	}
 
 }
+?>

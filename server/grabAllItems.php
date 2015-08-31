@@ -1,16 +1,3 @@
-<!DOCTYPE HTML>
-<html>
-
-<head>
-	<title>Title</title>
-</head>
-
-<body>
-
-</body>
-
-</html>
-
 <?php
 
 function getPriceJSONFromServer($item){
@@ -227,16 +214,6 @@ while(TRUE){
 
 	$count++;
 }
-
-//echo '<br />Gathered All Items, Grabbing Data.<br />';
-
-//$dataArray = grabAllItemValues($nameArray);
-
-//echo '<br />Grabbed Data, Inserting into Database.<br />';
-
-//addArrayToDatabase($dataArray);
-//echo "Added to Database.<br />";
-//echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
 
 if(FALSE){
 	$temp = readMarketPage(0);
