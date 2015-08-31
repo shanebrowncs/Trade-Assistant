@@ -1,0 +1,39 @@
+input{
+	margin: 5px;
+}
+
+table{
+	background-color: #1A1A1A;
+	margin-bottom: 30px;
+	float:right;
+}
+
+table td{
+	background-color: #303030;
+	width: 200px;
+	color: white;
+}
+
+table td.highlighted{
+	background-color: #737373;
+}
+
+
+#addBtn{
+	float:left;
+	width: 3em;
+	height: inherit;
+	margin: 3px;
+	display: block;
+
+	-webkit-transition: all 1s linear;
+    -o-transition: all 1s linear;
+    -moz-transition: all 1s linear;
+    -ms-transition: all 1s linear;
+    -kthtml-transition: all 1s linear;
+    transition: all 1s linear;
+}
+
+#addBtn:hover{
+	background-image: url("images/plus_hover.png");
+}

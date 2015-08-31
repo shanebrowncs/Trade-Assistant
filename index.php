@@ -20,7 +20,7 @@
 	<div id="navbar">
 		<a href="help.html">How To / Info</a>
 		<a href="#">Settings</a>
-		<a href="#">Item Calculator</a>
+		<a href="calculator.php">Item Calculator</a>
 		<a href="index.php">Home</a>
 	</div>
 
