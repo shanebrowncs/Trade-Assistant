@@ -146,6 +146,9 @@ if($sqlData === FALSE){
 }
 
 $count = 0;
+
+//debug
+$longestItem = 0;
 while(TRUE){
 	$temp = readMarketPage($count);
 
@@ -155,11 +158,13 @@ while(TRUE){
 
 	for($i = 0; $i < count($temp); $i++){
 		addItemToDatabase(grabItemValue($temp[$i]), $sqlData->host, $sqlData->db, $sqlData->user, $sqlData->pass);
+		if(strlen($temp[$i]) > $longestItem){
+			$longestItem = strlen($temp[$i]);
+		}
 	}
 
 	$count++;
 }
-
-echo "\nTime: " . $microtime(true) - $time_pre;
+echo "<br />Longest: " . $longestItem;
 
 ?>

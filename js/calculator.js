@@ -13,13 +13,6 @@ $(function(){
                             for(var i = 0; i < availableTags.length; i++){
                                 $("#result").append('<div class="item">' + availableTags[i] + '</div>');
                             }
-
-                            /*$("#autocomplete").autocomplete({
-                                select:function(event, ui){
-                                    console.log($("#autocomplete").val(ui.item.value));
-                                },
-                                source: availableTags
-                            });*/
                         }else{
                             $("#result").html('');
                         }

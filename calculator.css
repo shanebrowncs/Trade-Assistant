@@ -1,12 +1,14 @@
 input{
 	width: 15%;
+	font-size: 0.9em;
+	padding: 3px;
 }
 
 table{
 	background-color: #1A1A1A;
 	margin-bottom: 30px;
 	position: relative;
-	z-index: 10;
+	z-index: -10;
 }
 
 table td{
@@ -19,24 +21,20 @@ table td.highlighted{
 	background-color: #737373;
 }
 
-/*#table_container{
-	position: relative;
-	z-index: 10;
-}*/
-
 #result{
 	color: #303030;
-	border: 1px solid #1A1A1A;
+	border: 2px solid #1A1A1A;
 	display: table;
 	position: absolute;
 }
 
 .item{
 	padding: 3px;
-	border: 1px solid #1A1A1A;
-	background-color: #303030;
+	background-color: #3d3d3d;
+	font-size: 0.9em;
 }
 
 .item:hover{
 	cursor: pointer;
+	background-color: #363636;
 }

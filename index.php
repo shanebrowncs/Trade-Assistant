@@ -20,11 +20,11 @@
 	<div id="navbar">
 		<a href="help.html">How To / Info</a>
 		<a href="#">Settings</a>
-		<a href="calculator.php">Item Calculator</a>
+		<a href="calculator.html">Item Calculator</a>
 		<a href="index.php">Home</a>
 	</div>
 
-	<a href="?"><h1>Trade Assistant</h1></a>
+	<a href="?"><h1>TRADE ASSISTANT</h1></a>
 
 	<!-- This Credit is a little obnoxious I know, feel free to remove it.
 		I would appreciate if you could credit me somewhere but it's not required as long as you do not claim my work is your own. -->

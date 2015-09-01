@@ -1,5 +1,15 @@
+@font-face {
+    font-family: dense;
+    src: url("fonts/Roboto-Regular.ttf");
+}
+
+@font-face {
+	font-family: roboto-light;
+	src: url("fonts/Roboto-Light.ttf");
+}
+
 *{
-	font-family: Helvetica, Arial, Sans-Serif;
+	font-family: roboto-light, Arial, Sans-Serif;
 	color: white;
 }
 
@@ -26,10 +36,13 @@ a:hover{
 h1{
 	color: white;
 	margin: 0;
+	font-family: dense;
+	font-size: 3em;
 }
 
 h2{
 	color: white;
+	font-family: dense;
 }
 
 p{
