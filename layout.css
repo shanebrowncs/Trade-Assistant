@@ -1,15 +1,15 @@
 @font-face {
     font-family: dense;
-    src: url("fonts/Roboto-Regular.ttf");
+    src: url("fonts/Dense-Regular.otf");
 }
 
 @font-face {
-	font-family: roboto-light;
-	src: url("fonts/Roboto-Light.ttf");
+	font-family: roboto-regular;
+	src: url("fonts/Roboto-Regular.ttf");
 }
 
 *{
-	font-family: roboto-light, Arial, Sans-Serif;
+	font-family: roboto-regular, Arial, Sans-Serif;
 	color: white;
 }
 
@@ -34,24 +34,35 @@ a:hover{
 /* WHITE TEXT */
 
 h1{
-	color: white;
+	color: #8bcfe5;
 	margin: 0;
 	font-family: dense;
 	font-size: 3em;
 }
 
 h2{
-	color: white;
-	font-family: dense;
+	font-family: roboto-regular;
 }
 
 p{
-	margin: 0;
+	margin: 3px 0;
 	color: white;
+}
+
+#header{
+	float: left;
+	margin-top: 5px;
+}
+
+#header_image{
+	float: left;
+	margin-top: -5px;
+	margin-left: 5px;
 }
 
 #credit{
 	padding-bottom: 30px;
+	clear: both;
 }
 
 #credit a:link{
@@ -70,10 +81,23 @@ p{
 	float: right;
 	display: inline-block;
 	background-color: #424242;
+	color: #8bcfe5;
 
 	padding: 10px;
 
 	margin: 5px;
 
 	border-radius: 6px;
+}
+
+@media screen and (max-width: 842px) {
+    #header_image{
+		display: none;
+	}
+}
+
+@media screen and (max-width: 714px) {
+    #navbar{
+		float: left;
+	}
 }

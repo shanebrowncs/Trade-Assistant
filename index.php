@@ -19,13 +19,13 @@
 <body>
 	<div id="navbar">
 		<a href="help.html">How To / Info</a>
-		<a href="#">Settings</a>
+		<a href="settings.php">Settings</a>
 		<a href="calculator.html">Item Calculator</a>
 		<a href="index.php">Home</a>
 	</div>
 
-	<a href="?"><h1>TRADE ASSISTANT</h1></a>
-
+	<a id="header" href="?"><h1>| TRADE ASSISTANT |</h1></a>
+	<img id="header_image" src="images/csgo_logo.png"/>
 	<!-- This Credit is a little obnoxious I know, feel free to remove it.
 		I would appreciate if you could credit me somewhere but it's not required as long as you do not claim my work is your own. -->
 	<p id="credit">Created by <a href="http://shane-brown.ca/" target="_blank">Shane "SajeOne" Brown</a><br /></p>
@@ -51,7 +51,7 @@ function handleTrade($url, $host, $db, $user, $pass){
 
 	$total = array(0.0, 0.0, 0.0, 0.0);
 
-	echo "<h2 id=\"trader\">Trader's Items:</h2> <br />";
+	echo "<h2 id=\"trader\">Trader's Items:</h2>";
 	echo '<table id="left" style="width: 100%">';
 	echo '<tr><td>Item Name:</td><td>Current Price:</td><td>Median Price:</td><td>Market Worth:</td><td>Volume:</td></tr>';
 	for($i = 0; $i < count($multiArray[0]); $i++){

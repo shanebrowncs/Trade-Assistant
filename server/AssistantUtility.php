@@ -15,6 +15,40 @@ class AssistantUtility{
 
     	return $data;
     }
+
+    public static function getCurrencyConversion($fromCurrency, $toCurrency){
+        $url = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency=EUR&ToCurrency=USD';
+        $xml = simpleXML_load_file($url, "SimpleXMLElement", LIBXML_NOCDATA);
+        if($xml !=  FALSE){
+            echo $xml;
+        }else {
+            echo 'Could not get XML';
+        }
+    }
 }
+
+/*
+USD = 1
+GBP = 2
+EUR = 3
+<NIL> = 4
+RUB = 5
+<NIL> = 6
+BRL = 7
+JPY = 8
+NOK = 9
+IDR = 10
+MYR = 11
+PHP = 12
+SGD = 13
+THB = 14
+<NIL> = 15
+<NIL> = 16
+TRY = 17
+<NIL> = 18
+MXN = 19
+CAD = 20
+<NIL> = 21
+NZD = 22*/
 
 ?>
