@@ -31,7 +31,7 @@ class TradeTranslator{
 
 	public static function getItemJSON($item){
 		$item = str_replace(" ", "%20", $item);
-		@$raw = file_get_contents("http://steamcommunity.com/market/priceoverview/?country=US&currency=20&appid=730&market_hash_name=" . $item);
+		@$raw = file_get_contents("http://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name=" . $item);
 		if($raw === FALSE){
 			return FALSE;
 		}
