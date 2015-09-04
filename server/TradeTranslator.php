@@ -47,7 +47,7 @@ class TradeTranslator{
 		if(!isset($json->lowest_price)){
 			return 0.0;
 		}
-		return floatval(substr($json->lowest_price, 5));
+		return floatval(substr($json->lowest_price, 1));
 	}
 
 	public static function getItemMedianPrice($raw){
@@ -58,7 +58,7 @@ class TradeTranslator{
 			return 0.0;
 		}
 
-		return floatval(substr($json->median_price, 5));
+		return floatval(substr($json->median_price, 1));
 	}
 
 	public static function getItemVolume($raw){

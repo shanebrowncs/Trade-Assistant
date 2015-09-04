@@ -17,12 +17,22 @@ class AssistantUtility{
     }
 
     public static function getCurrencyConversion($fromCurrency, $toCurrency){
-        $url = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency=EUR&ToCurrency=USD';
+        $url = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency=' . $fromCurrency . '&ToCurrency=' . $toCurrency;
         $xml = simpleXML_load_file($url, "SimpleXMLElement", LIBXML_NOCDATA);
         if($xml !=  FALSE){
-            echo $xml;
+            return $xml;
         }else {
-            echo 'Could not get XML';
+            return 0.0;
+        }
+    }
+
+    public static function getUserCurrency(){
+        $currency = new stdClass();
+        if(isset($_COOKIE['currency'])){
+            $currency = $_COOKIE['currency'];
+            return $currency;
+        }else{
+            return FALSE;
         }
     }
 }

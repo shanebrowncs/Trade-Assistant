@@ -19,7 +19,7 @@
 
 	<div id="navbar">
 		<a href="help.html">How To / Info</a>
-		<a href="settings.html">Settings</a>
+		<a href="settings.php">Settings</a>
 		<a href="calculator.html">Item Calculator</a>
 		<a href="index.php">Home</a>
 	</div>
@@ -83,12 +83,12 @@ CAD = 20
 NZD = 22*/
 
 if(isset($_POST['currency']) && !empty($_POST['currency'])){
-	setcookie("currency", $_POST['currency'], time() + (525949 * 60));
+	setcookie("currency", $_POST['currency'], time() + (525949 * 60), './', FALSE); // NULL REQUIRED FOR LOCALHOST
 
 	if(isset($_POST['manualprice'])){
-		setcookie("manualprice", "true", time() + (525949 * 60));
+		setcookie("manualprice", "true", time() + (525949 * 60), './', FALSE);
 	}else{
-		setcookie("manualprice", "false", time() + (525949 * 60));
+		setcookie("manualprice", "false", time() + (525949 * 60), './', FALSE);
 	}
 
 	echo '<br/><br/>Submitted New Settings!';
