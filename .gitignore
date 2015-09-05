@@ -3,3 +3,4 @@ settings.ini.server
 settings.ini.client
 .htaccess
 .gitignore~
+*.bak
