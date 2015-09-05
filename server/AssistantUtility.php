@@ -27,13 +27,21 @@ class AssistantUtility{
     }
 
     public static function getUserCurrency(){
-        $currency = new stdClass();
-        if(isset($_COOKIE['currency'])){
-            $currency = $_COOKIE['currency'];
-            return $currency;
-        }else{
+        if(isset($_COOKIE['currency']))
+            return $_COOKIE['currency'];
+        else
             return FALSE;
+    }
+
+    public static function getManualFetch(){
+        if(isset($_COOKIE['manualprice'])){
+            if($_COOKIE['manualprice'] == "true")
+                return TRUE;
+            else
+                return FALSE;
         }
+        else
+            return FALSE;
     }
 }
 

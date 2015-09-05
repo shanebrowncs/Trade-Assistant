@@ -42,7 +42,7 @@
 
 <?php
 
-function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConversion){
+function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConversion, $manual){
 	$multiArray = TradeTranslator::getTrade($_GET["url"]);
 	if($multiArray === FALSE){
 		echo 'Failed to fetch trade.';
@@ -57,7 +57,7 @@ function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConvers
 	for($i = 0; $i < count($multiArray[0]); $i++){
 		$leftItem = fetchSqlData($multiArray[0][$i], $host, $db, $user, $pass, $currencyConversion);
 
-		if($leftItem === FALSE){
+		if($manual || $leftItem === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $multiArray[0][$i] . '");</script>';
 			$leftItemJSON = TradeTranslator::getItemJSON($multiArray[0][$i]);
 			$leftItem = new stdClass();
@@ -101,7 +101,7 @@ function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConvers
 	for($i = 0; $i < count($multiArray[1]); $i++){
 		$rightItem = fetchSqlData($multiArray[1][$i], $host, $db, $user, $pass, $currencyConversion);
 
-		if($rightItem === FALSE){
+		if($manual || $rightItem === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $multiArray[1][$i] . '");</script>';
 			$rightItemJSON = TradeTranslator::getItemJSON($multiArray[1][$i]);
 			$rightItem = new stdClass();
@@ -144,7 +144,7 @@ function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConvers
 	}
 }
 
-function handleInventory($url, $host, $db, $user, $pass, $currency, $currencyConversion){
+function handleInventory($url, $host, $db, $user, $pass, $currency, $currencyConversion, $manual){
 	$itemArray = InventoryTranslator::getInventory($url, $host, $db, $user, $pass);
 	$name = InventoryTranslator::getSteamName($url);
 	if($itemArray === FALSE){
@@ -164,7 +164,7 @@ function handleInventory($url, $host, $db, $user, $pass, $currency, $currencyCon
 	for($i = 0; $i < count($itemArray); $i++){
 		$item = fetchSqlData($itemArray[$i]->name, $host, $db, $user, $pass, $currencyConversion);
 
-		if($item === FALSE){
+		if($manual || $item === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $itemArray[$i]->name . '");</script>';
 			$item = new stdClass();
 			if(($itemJSON = TradeTranslator::getItemJSON($itemArray[$i]->name)) != FALSE){
@@ -255,14 +255,17 @@ if(isset($_GET['url'])){
 		}
 	}
 
+	if(($manualPrice = AssistantUtility::getManualFetch()) == FALSE)
+		$manualPrice = FALSE;
+
 	if(strpos($url, "csgolounge.com/trade") !== FALSE){
-		handleTrade($url, $sqlData->host, $sqlData->db, $sqlData->user, $sqlData->pass, $currency, $currencyConversion);
+		handleTrade($url, $sqlData->host, $sqlData->db, $sqlData->user, $sqlData->pass, $currency, $currencyConversion, $manualPrice);
 	}else if(strpos($url, "steamcommunity.com")){
-		handleInventory($url, $sqlData->host, $sqlData->db, $sqlData->user, $sqlData->pass, $currency, $currencyConversion);
+		handleInventory($url, $sqlData->host, $sqlData->db, $sqlData->user, $sqlData->pass, $currency, $currencyConversion, $manualPrice);
 	}else if(strpos($url, "csgolounge.com/profile")){
 		if(strlen($url) >= 50){
 			$index = strpos($url, "profile?id=") + 11;
-			handleInventory("http://steamcommunity.com/profiles/" . substr($url, $index), $sqlData->host, $sqlData->db, $sqlData->user, $sqlData->pass, $currency, $currencyConversion);
+			handleInventory("http://steamcommunity.com/profiles/" . substr($url, $index), $sqlData->host, $sqlData->db, $sqlData->user, $sqlData->pass, $currency, $currencyConversion, $manualPrice);
 		}else{
 			echo 'Malformed URL';
 		}
