@@ -24,7 +24,7 @@
 		<a href="index.php">Home</a>
 	</div>
 
-	<a id="header" href="?"><h1>| TRADE ASSISTANT |</h1></a>
+	<a id="header" href="index.php"><h1>| TRADE ASSISTANT |</h1></a>
 	<img id="header_image" src="images/csgo_logo.png"/>
 	<!-- This Credit is a little obnoxious I know, feel free to remove it.
 		I would appreciate if you could credit me somewhere but it's not required as long as you do not claim my work is your own. -->
