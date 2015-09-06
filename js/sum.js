@@ -57,44 +57,55 @@ function isHighlighted(table, x, y){
 	}
 }
 
+function getCurrency(){
+	var cookies = document.cookie.split(";");
+	var cookie = cookies[0].replace("currency=", "");
+	//cookie = cookie.substring(0, cookie.length - 1);
+	return cookie;
+}
+
 $(function () {
   var down = false;
   $("#left td, #right td")
     .mousedown(function () {
       down = true;
-      if($(this).html().substring(0, 3) == "CDN"){
+	  console.log("mouse down");
+	  var cookie = getCurrency();
+	  console.log(cookie);
+      if($(this).html().substring(0, 3) == cookie){
       	var column = $(this).parent().children().index(this);
 
 	    var row = $(this).parent().parent().children().index(this.parentNode);
 	    $(this).toggleClass("highlighted");
 	    if($(this).hasClass("checked")){
-	    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(5, 9)));
+	    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(4, 9)));
 	    	$(this).removeClass("checked");
 	    	console.log("off");
 	    }else{
-	    	updateSum($(this).closest('table').attr('id'), true, parseFloat($(this).html().substring(5, 9)));
+	    	updateSum($(this).closest('table').attr('id'), true, parseFloat($(this).html().substring(4, 9)));
 	    	$(this).addClass("checked");
 	    	console.log("on");
 	    }
 	    return false;
   	  }
 
-  	  
-      
+
+
     })
     .mouseover(function () {
       if (down) {
-        if($(this).html().substring(0, 3) == "CDN"){
+		var cookie = getCurrency();
+        if($(this).html().substring(0, 3) == cookie){
 	      	var column = $(this).parent().children().index(this);
 
 		    var row = $(this).parent().parent().children().index(this.parentNode);
 		    $(this).toggleClass("highlighted");
 		    if($(this).hasClass("checked")){
-		    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(5, 9)));
+		    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(4, 9)));
 		    	$(this).removeClass("checked");
 		    	console.log("off");
 		    }else{
-		    	updateSum($(this).closest('table').attr('id'), true, parseFloat($(this).html().substring(5, 9)));
+		    	updateSum($(this).closest('table').attr('id'), true, parseFloat($(this).html().substring(4, 9)));
 		    	$(this).addClass("checked");
 		    	console.log("on");
 		    }
@@ -102,7 +113,7 @@ $(function () {
   	    }
       }
     });
-  
+
   $(document)
     .mouseup(function () {
       down = false;

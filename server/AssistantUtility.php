@@ -20,7 +20,7 @@ class AssistantUtility{
         $url = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency=' . $fromCurrency . '&ToCurrency=' . $toCurrency;
         $xml = simpleXML_load_file($url, "SimpleXMLElement", LIBXML_NOCDATA);
         if($xml !=  FALSE){
-            return $xml;
+            return floatval($xml);
         }else {
             return 0.0;
         }
