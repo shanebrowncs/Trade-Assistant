@@ -47,9 +47,6 @@ $(function () {
       down = true;
 	  var cookie = getCurrency();
       if($(this).html().substring(0, 3) == cookie){
-      	var column = $(this).parent().children().index(this);
-
-	    var row = $(this).parent().parent().children().index(this.parentNode);
 	    $(this).toggleClass("highlighted");
 	    if($(this).hasClass("checked")){
 	    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(4).replace(",", "")), cookie);
@@ -60,15 +57,12 @@ $(function () {
 	    }
 	    return false;
   	  }
-    })
-	
+  })
+
     .mouseover(function () {
       if (down) {
 		var cookie = getCurrency();
         if($(this).html().substring(0, 3) == cookie){
-	      	var column = $(this).parent().children().index(this);
-
-		    var row = $(this).parent().parent().children().index(this.parentNode);
 		    $(this).toggleClass("highlighted");
 		    if($(this).hasClass("checked")){
 		    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(4)), cookie);

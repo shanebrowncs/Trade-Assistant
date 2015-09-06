@@ -2,22 +2,6 @@ input{
 	margin: 4px;
 }
 
-table{
-	background-color: #1A1A1A;
-	margin-bottom: 30px;
-}
-
-table td{
-	background-color: #303030;
-	width: 200px;
-	color: white;
-	padding: 3px 1px;
-}
-
-table td.highlighted{
-	background-color: #737373;
-}
-
 h3{
 	color: white;
 	margin: 4px;

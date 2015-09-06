@@ -2,9 +2,7 @@
 <html>
 
 <head>
-	<link rel="stylesheet" href="jquery/jquery-ui.min.css">
-	<script src="jquery/jquery.js"></script>
-	<script src="jquery/jquery-ui.min.js"></script>
+	<script src="js/jquery-1.11.2.min.js"></script>
 	<script src="js/sum.js"></script>
 	<script src="js/calculator.js"></script>
 	<link rel="stylesheet" type="text/css" href="layout.css" />
@@ -30,34 +28,28 @@
 	<p id="credit">Created by <a href="http://shane-brown.ca/" target="_blank">Shane "SajeOne" Brown</a><br /></p>
 
 	<div id="page_content">
-		<h2 id="trader">Trader's Items:</h2> <br />
 		<label for="autocomplete">Search: <br /></label>
 		<input id="autocomplete"/>
-		<div id="result">
+		<div id="result"></div>
 
-		</div>
+		<form>
+			<input id="traderradio" type="radio" name="side" value="trader" checked /><label for="traderradio">To Trader</label>
+			<input id="requestedradio" type="radio" name="side" value="requested"/><label for="requestedradio">To Requested</label>
+			<input id="removebtn" type="button" name="remove" value="Remove Selected"/>
+		</form>
+
 		<div id="table_container">
+			<h2 id="trader">Trader's Items:</h2>
 			<table id="left" style="width: 100%;">
 				<tr><td>Item Name:</td><td>Current Price:</td><td>Median Price:</td><td>Market Worth:</td><td>Volume:</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
-				<tr><td>Test Item</td><td>$1.23</td><td>$1.19</td><td>$1.02</td><td>29323</td></tr>
+			</table>
+			<h2 id="requested">Requested Items:</h2>
+			<table id="right" style="width: 100%;">
+				<tr><td>Item Name:</td><td>Current Price:</td><td>Median Price:</td><td>Market Worth:</td><td>Volume:</td></tr>
 			</table>
 		</div>
+
+
 	</div>
 </body>
 

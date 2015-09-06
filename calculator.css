@@ -1,24 +1,11 @@
-input{
+#autocomplete{
 	width: 15%;
 	font-size: 0.9em;
 	padding: 3px;
 }
 
-table{
-	background-color: #1A1A1A;
-	margin-bottom: 30px;
-	position: relative;
-	z-index: -10;
-}
-
-table td{
-	background-color: #303030;
-	width: 200px;
-	color: white;
-}
-
-table td.highlighted{
-	background-color: #737373;
+form{
+	margin: 10px 0;
 }
 
 #result{
