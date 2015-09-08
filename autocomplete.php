@@ -46,6 +46,11 @@ function handleSearch(){
 }
 
 function handleItemFetch(){
+    if(!isset($_GET['cur']) || empty($_GET['cur'])){
+        die("");
+    }
+
+    $currency = $_GET['cur'];
     $item = $_GET['getitem'];
     // Get SQL Info
     if(($settings = AssistantUtility::readSettingsFile("settings.ini")) == FALSE){
@@ -70,6 +75,14 @@ function handleItemFetch(){
     $itemArray = array();
     while($row = mysqli_fetch_array($result)){
         $itemArray[] = $row;
+    }
+    $itemArray = $itemArray[0];
+
+    $conversion = AssistantUtility::getCurrencyConversion("USD", $currency);
+
+    for ($i=1; $i < 4; $i++) {
+        $itemArray[$i] *= $conversion;
+        $itemArray[$i] = round($itemArray[$i], 2);
     }
 
     mysqli_close($sqlConn);

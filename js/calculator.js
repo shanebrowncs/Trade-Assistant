@@ -30,18 +30,35 @@ function removeHighlightedRows(){
 
 function ajaxGetItemJSON(inputData, currency){
     $.ajax({
-            url: "autocomplete.php",
-            data: "getitem=" + inputData + "?cur=" + currency,
-            success: function(msg){
-                if(msg != ""){
-                    console.log(msg);
-                    obj = JSON.parse(msg);
-                    return obj;
-                }else{
-                    return false;
-                }
+        url: "autocomplete.php",
+        data: "getitem=" + inputData + "&cur=" + currency,
+        success: function(msg){
+            if(msg != ""){
+                obj = JSON.parse(msg);
+                addItemToTable(obj);
             }
+        }
     });
+
+    return false;
+}
+
+function addItemToTable(json){
+    var currency = getCurrency();
+    if($("#traderradio").is(':checked')){
+        $('#left > tbody > tr').eq(i-1).before("<tr><td>" + json.name + "</td><td>" + currency + " " + json.current + "</td><td>" + currency + " " + json.median + "</td><td>" + currency + " " + json.market + "</td><td>" + json.volume + "</td></tr>");
+        traderSums[0] += parseFloat(json.current);
+        traderSums[1] += parseFloat(json.median);
+        traderSums[2] += parseFloat(json.market);
+        traderSums[3] += parseFloat(json.volume);
+    }else{
+        $('#right > tbody > tr').eq(i-1).before("<tr><td>" + json.name + "</td><td>" + currency + " " + json.current + "</td><td>" + currency + " " + json.median + "</td><td>" + currency + " " + json.market + "</td><td>" + json.volume + "</td></tr>");
+        requestedSums[0] += parseFloat(json.current);
+        requestedSums[1] += parseFloat(json.median);
+        requestedSums[2] += parseFloat(json.market);
+        requestedSums[3] += parseFloat(json.volume);
+        $('#right > tbody > tr').eq(i).replaceWith("<tr><td>Total:</td><td>" + currency + " " + requestedSums[0] + "</td><td>" + currency + " 0.00</td><td>" + currency + " 0.00</td><td>0</td></tr>");
+    }
 }
 
 function getCurrency(){
@@ -54,11 +71,22 @@ function getCurrency(){
         }
     }
 
-    return false;
+    return "USD";
 }
 
 $(function(){
     var mouseDown = false;
+
+    var traderSums = [];
+    var requestedSums = [];
+    for(var i = 0; i < 4; i++){
+        traderSums[i] = 0;
+        requestedSums[i] = 0;
+    }
+
+
+    var currency = getCurrency();
+    $("#left, #right").append("<tr><td>Total:</td><td>" + currency + " 0.00</td><td>" + currency + " 0.00</td><td>" + currency + " 0.00</td><td>0</td></tr>");
 
     $("#left td, #right td")
     .mousedown(function () {
@@ -90,23 +118,12 @@ $(function(){
     });
 
     $(document)
-      .mouseup(function () {
-        mouseDown = false;
-
-        $(".item").click(function(){
-            $("#autocomplete").val("");
-            $("#result").html('');
-            var itemJSON;
-            if(itemJSON = ajaxGetItemJSON($(this).text()) != false){
-                if($("#traderradio").is(" :checked")){
-                    var currency;
-                    if(currency = getCurrency()){
-                        
-                    }
-                }else{
-                    getCurrency();
-                }
-            }
+        .mouseup(function () {
+            mouseDown = false;
+            $(".item").click(function(){
+                $("#autocomplete").val("");
+                $("#result").html('');
+                ajaxGetItemJSON($(this).text(), getCurrency());
+            });
         });
-      });
 })

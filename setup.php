@@ -3,6 +3,8 @@
 <head>
     <title>Trade Assistant Setup</title>
     <link rel="stylesheet" type="text/css" href="layout.css"/>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
     <style>
     h1{
         margin-bottom: 10px;
