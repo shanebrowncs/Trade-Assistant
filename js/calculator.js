@@ -57,7 +57,7 @@ function addItemToTable(json){
         requestedSums[1] += parseFloat(json.median);
         requestedSums[2] += parseFloat(json.market);
         requestedSums[3] += parseFloat(json.volume);
-        $('#right > tbody > tr').eq(i).replaceWith("<tr><td>Total:</td><td>" + currency + " " + requestedSums[0] + "</td><td>" + currency + " 0.00</td><td>" + currency + " 0.00</td><td>0</td></tr>");
+        $('#right > tbody > tr').eq(i).replaceWith("<tr><td>Total:</td><td>" + currency + " " + requestedSums[0] + "</td><td>" + currency + " " + requestedSums[1] + "</td><td>" + currency + " " + requestedSums[0] + "</td><td>0</td></tr>");
     }
 }
 
