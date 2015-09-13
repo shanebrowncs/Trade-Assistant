@@ -52,40 +52,9 @@ function handleItemFetch(){
 
     $currency = $_GET['cur'];
     $item = $_GET['getitem'];
-    // Get SQL Info
-    if(($settings = AssistantUtility::readSettingsFile("settings.ini")) == FALSE){
-        die("");
-    }
 
-    // Connect to MySQL
-    if(($sqlConn = @mysqli_connect($settings->host, $settings->user, $settings->pass, $settings->db)) == FALSE){
-        die("");
-    }
+    $itemResult = AssistantUtility::fetchSqlData($item, $host, $db, $user, $pass, $currencyConversion);
 
-    // Protect against SQL injection
-    $item = mysqli_real_escape_string($sqlConn, $item);
-
-    $sqlQuery = "SELECT * FROM `items` WHERE `name`='" . $item . "'";
-    $result = mysqli_query($sqlConn, $sqlQuery);
-    if($result === FALSE){
-        mysqli_close($sqlConn);
-        die("");
-    }
-
-    $itemArray = array();
-    while($row = mysqli_fetch_array($result)){
-        $itemArray[] = $row;
-    }
-    $itemArray = $itemArray[0];
-
-    $conversion = AssistantUtility::getCurrencyConversion("USD", $currency);
-
-    for ($i=1; $i < 4; $i++) {
-        $itemArray[$i] *= $conversion;
-        $itemArray[$i] = round($itemArray[$i], 2);
-    }
-
-    mysqli_close($sqlConn);
     return json_encode($itemArray);
 }
 

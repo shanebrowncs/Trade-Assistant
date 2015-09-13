@@ -4,3 +4,4 @@ settings.ini.client
 .htaccess
 .gitignore~
 *.bak
+.tags*

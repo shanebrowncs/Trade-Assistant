@@ -16,6 +16,30 @@ class AssistantUtility{
     	return $data;
     }
 
+    public static function fetchSqlData($item, $host, $db, $user, $pass, $currencyConversion){
+    	$sqlConn = @mysqli_connect($host, $user, $pass);
+
+    	if($sqlConn !== FALSE){
+    		mysqli_select_db($sqlConn, $db);
+
+    		$obj = new stdClass();
+    		$result = mysqli_query($sqlConn, "SELECT * FROM `items` WHERE `name`='" . $item . "'");
+    		if(mysqli_num_rows($result) > 0){
+    			$row = mysqli_fetch_assoc($result);
+    			$obj->curPrice = floatval($row["current"]) * $currencyConversion;
+    			$obj->medPrice = floatval($row["median"]) * $currencyConversion;
+    			$obj->taxPrice = floatval($row["market"]) * $currencyConversion;
+    			$obj->volume = intval($row["volume"]);
+    		}
+    		else
+    			return FALSE;
+
+    		return $obj;
+    	}else{
+    		return FALSE;
+    	}
+    }
+
     public static function getCurrencyConversion($fromCurrency, $toCurrency){
         $url = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency=' . $fromCurrency . '&ToCurrency=' . $toCurrency;
         $xml = simpleXML_load_file($url, "SimpleXMLElement", LIBXML_NOCDATA);

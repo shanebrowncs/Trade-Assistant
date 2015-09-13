@@ -55,7 +55,7 @@ function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConvers
 	echo '<table id="left" style="width: 100%">';
 	echo '<tr><td>Item Name:</td><td>Current Price:</td><td>Median Price:</td><td>Market Worth:</td><td>Volume:</td></tr>';
 	for($i = 0; $i < count($multiArray[0]); $i++){
-		$leftItem = fetchSqlData($multiArray[0][$i], $host, $db, $user, $pass, $currencyConversion);
+		$leftItem = AssistantUtility::fetchSqlData($multiArray[0][$i], $host, $db, $user, $pass, $currencyConversion);
 
 		if($manual || $leftItem === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $multiArray[0][$i] . '");</script>';
@@ -99,7 +99,7 @@ function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConvers
 	echo '<table id="right" style="width: 100%">';
 	echo '<tr><td>Item Name:</td><td>Current Price:</td><td>Median Price:</td><td>Market Worth:</td><td>Volume:</td></tr>';
 	for($i = 0; $i < count($multiArray[1]); $i++){
-		$rightItem = fetchSqlData($multiArray[1][$i], $host, $db, $user, $pass, $currencyConversion);
+		$rightItem = AssistantUtility::fetchSqlData($multiArray[1][$i], $host, $db, $user, $pass, $currencyConversion);
 
 		if($manual || $rightItem === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $multiArray[1][$i] . '");</script>';
@@ -162,7 +162,7 @@ function handleInventory($url, $host, $db, $user, $pass, $currency, $currencyCon
 	echo '<table id="left" style="width: 100%">';
 	echo '<tr><td>Item Name:</td><td>Current Price:</td><td>Median Price:</td><td>Market Worth:</td><td>Volume:</td></tr>';
 	for($i = 0; $i < count($itemArray); $i++){
-		$item = fetchSqlData($itemArray[$i]->name, $host, $db, $user, $pass, $currencyConversion);
+		$item = AssistantUtility::fetchSqlData($itemArray[$i]->name, $host, $db, $user, $pass, $currencyConversion);
 
 		if($manual || $item === FALSE){
 			echo '<script>console.log("Manually Grabbing: ' . $itemArray[$i]->name . '");</script>';
@@ -200,30 +200,7 @@ function handleInventory($url, $host, $db, $user, $pass, $currency, $currencyCon
 	echo '</table>';
 }
 
-function fetchSqlData($item, $host, $db, $user, $pass, $currencyConversion){
-	$sqlConn = @mysqli_connect($host, $user, $pass);
 
-	if($sqlConn !== FALSE){
-		mysqli_select_db($sqlConn, $db);
-
-		$obj = new stdClass();
-		$result = mysqli_query($sqlConn, "SELECT * FROM `items` WHERE `name`='" . $item . "'");
-		if(mysqli_num_rows($result) > 0){
-			$row = mysqli_fetch_assoc($result);
-			$obj->curPrice = floatval($row["current"]) * $currencyConversion;
-			$obj->medPrice = floatval($row["median"]) * $currencyConversion;
-			$obj->taxPrice = floatval($row["market"]) * $currencyConversion;
-			$obj->volume = intval($row["volume"]);
-		}
-		else
-			return FALSE;
-
-		return $obj;
-	}else{
-		return FALSE;
-	}
-
-}
 
 /* START OF PROGRAM FLOW */
 
