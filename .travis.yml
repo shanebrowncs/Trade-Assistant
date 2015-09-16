@@ -1,4 +1,4 @@
-# Required to run your project under the correct environment.
+# Required to run your project under the correct environment
 language: php
 
 # Versions of PHP you want your project run with.
