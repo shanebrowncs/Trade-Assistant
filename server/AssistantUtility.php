@@ -22,19 +22,27 @@ class AssistantUtility{
     	if($sqlConn !== FALSE){
     		mysqli_select_db($sqlConn, $db);
 
-    		$obj = new stdClass();
-    		$result = mysqli_query($sqlConn, "SELECT * FROM `items` WHERE `name`='" . $item . "'");
-    		if(mysqli_num_rows($result) > 0){
-    			$row = mysqli_fetch_assoc($result);
-    			$obj->curPrice = floatval($row["current"]) * $currencyConversion;
-    			$obj->medPrice = floatval($row["median"]) * $currencyConversion;
-    			$obj->taxPrice = floatval($row["market"]) * $currencyConversion;
-    			$obj->volume = intval($row["volume"]);
-    		}
-    		else
-    			return FALSE;
+            $stmt = mysqli_stmt_init($sqlConn);
+            if(mysqli_stmt_prepare($stmt, 'SELECT * FROM `items` WHERE `name`=?')){
+                mysqli_stmt_bind_param($stmt, 's', $item);
+                if(mysqli_stmt_execute($stmt)){
+                    mysqli_stmt_bind_result($stmt, $name, $current, $median, $market, $volume);
+                    mysqli_stmt_fetch($stmt);
 
-    		return $obj;
+                    $obj = new stdClass();
+                    while(mysqli_stmt_fetch($stmt)){
+                        echo $current;
+            			$obj->curPrice = floatval($current) * $currencyConversion;
+            			$obj->medPrice = floatval($current) * $currencyConversion;
+            			$obj->taxPrice = floatval($current) * $currencyConversion;
+            			$obj->volume = intval($volume);
+            		}
+
+            		return $obj;
+                }
+                mysqli_stmt_close($stmt);
+            }
+            mysqli_close($sqlConn);
     	}else{
     		return FALSE;
     	}
