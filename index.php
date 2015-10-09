@@ -71,6 +71,7 @@ function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConvers
 				$leftItem->medPrice *= $currencyConversion;
 				$leftItem->taxPrice = $leftItem->curPrice - ($leftItem->curPrice * 0.15);
 			}else{
+				echo $leftItem->curPrice;
 				$leftItem->curPrice = 0.0;
 				$leftItem->medPrice = 0.0;
 				$leftItem->taxPrice = 0.0;
@@ -79,15 +80,14 @@ function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConvers
 
 
 		}else{
+			$total[0] += $leftItem->curPrice;
+			$total[1] += $leftItem->medPrice;
+			$total[2] += $leftItem->taxPrice;
+			$total[3] += $leftItem->volume;
 			echo '<script>console.log("SQL Grabbing: ' . $multiArray[0][$i] . '");</script>';
 		}
 
 		echo '<tr><td>' . $multiArray[0][$i] . '</td><td>' . $currency . " " . number_format($leftItem->curPrice, 2) . '</td><td>' . $currency . " " . number_format($leftItem->medPrice, 2) . '</td><td>' . $currency . " " . number_format($leftItem->taxPrice, 2) . '</td><td>' . $leftItem->volume . '</td></tr>';
-
-		$total[0] += $leftItem->curPrice;
-		$total[1] += $leftItem->medPrice;
-		$total[2] += $leftItem->taxPrice;
-		$total[3] += $leftItem->volume;
 	}
 	echo '<tr><td>Total:</td><td>' . $currency . " " . number_format($total[0], 2) . '</td><td>' . $currency . " " . number_format($total[1], 2) . '</td><td>' . $currency . " " . number_format($total[2], 2) . '</td><td>' . $total[3] . '</td></tr>';
 	echo '</table>';

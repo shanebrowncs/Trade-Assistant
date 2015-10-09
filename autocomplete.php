@@ -9,40 +9,39 @@ function handleSearch(){
     }
 
     // Connect to MySQL
-    if(($sqlConn = @mysqli_connect($settings->host, $settings->user, $settings->pass, $settings->db)) == FALSE){
+    if(($sqlConn = new mysqli($settings->host, $settings->user, $settings->pass, $settings->db)) == FALSE){
         die("");
     }
 
-    // Protect against SQL injection
-    $search = mysqli_real_escape_string($sqlConn, $search);
-    $search = preg_split('/\s+/', $search);
+    // Add wildcards to search terms
+    $search = "%" . str_replace(" ", "%", $search) . "%";
 
     // Build SQL Query from search items
-    $sqlQuery = "SELECT `name` FROM `items` WHERE `name` LIKE '%";
-    for($i = 0; $i < count($search); $i++){
-        $sqlQuery .= $search[$i] . "%";
+    $bindParamString = "";
+    $sqlQuery = "SELECT name FROM items WHERE name LIKE ? LIMIT 10";
+
+    // Prepared Statement
+    if($stmt = $sqlConn->prepare($sqlQuery)){
+        $stmt->bind_param("s", $search);
+        if($stmt->execute()){
+            $result = $stmt->get_result();
+
+            // Get array of items from query result
+            $data = "";
+            while($row = $result->fetch_assoc()){
+                $data .= $row['name'] . "<br />";
+            }
+            // Remove line ending from the end of the string
+            $data = substr($data, 0, strlen($data) - 1);
+
+            $stmt->close();
+            $sqlConn->close();
+
+            return $data;
+        }
+        $stmt->close();
     }
-    $sqlQuery .= "' limit 10";
-
-    // Query database
-    $result = mysqli_query($sqlConn, $sqlQuery);
-    if($result === FALSE){
-        mysqli_close($sqlConn);
-        die("");
-    }
-
-    // Get array of items from query result
-    $data = "";
-    while($row = mysqli_fetch_assoc($result)){
-        $data .= $row['name'] . "<br />";
-    }
-
-    // Remove line ending from the end of the string
-    $data = substr($data, 0, strlen($data) - 1);
-
-    // Close SQL and return data
-    mysqli_close($sqlConn);
-    return $data;
+    $sqlConn->close();
 }
 
 function handleItemFetch(){
