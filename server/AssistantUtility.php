@@ -20,8 +20,6 @@ class AssistantUtility{
     	$sqlConn = new mysqli($host, $user, $pass, $db);
 
     	if($sqlConn !== FALSE){
-
-            $stmt = mysqli_stmt_init($sqlConn);
             if($stmt = $sqlConn->prepare('SELECT * FROM `items` WHERE `name`=?')){
                 $stmt->bind_param('s', $item);
                 if($stmt->execute()){

@@ -66,42 +66,63 @@ function readMarketPage($pageNum){
 	return $itemArray;
 }
 
-function addItemToDatabase($item, $host, $db, $user, $pass){
-	$sqlConn = mysqli_connect($host, $user, $pass);
-	if(mysqli_connect_errno()){
-		echo mysqli_connect_error();
+function checkItemExistence($item, $sqlConn){
+	if($sqlConn->errno){
+		echo $sqlConn->error();
 	}
 
-	mysqli_select_db($sqlConn, $db);
+	$item->name = str_replace("'", "\'", $item->name);
+	$compQuery = "SELECT name FROM items WHERE name=?";
+	if($stmt = $sqlConn->prepare($compQuery)){
+		$stmt->bind_param('s', $item->name);
+		if($stmt->execute()){
+			$result = $stmt->get_result();
 
-	if(isset($item->name)){
-		$compQuery = "SELECT `name` FROM `items` WHERE `name`='" . str_replace("'", "\'", $item->name) . "'";
-		$compResult = mysqli_query($sqlConn, $compQuery);
-		if($compResult === FALSE)
-			$rows = 1;
-		else
-			$rows = $compResult->fetch_assoc();
-
-		if(count($rows) > 0){
-			echo 'Updating ' . $item->name . "<br />";
-			echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
-
-			$updateQuery = "UPDATE `items` SET `current`='" . $item->curPrice . "', `median`='" . $item->medPrice . "', `market`='" . $item->taxPrice . "', `volume`='" . $item->volume . "' WHERE `name`='" . str_replace("'", "\'", $item->name) . "'";
-			$updateResult = mysqli_query($sqlConn, $updateQuery);
-			if($updateResult === FALSE){
-				echo "<br />" . mysqli_error($sqlConn) . "<br />";
+			if(strcmp($result->fetch_array(MYSQLI_NUM)[0], $item->name) == 0){
+				return true;
 			}
-
-		}else{
-			echo 'Inserting ' . $item->name . "<br />";
-			echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
-			//$setQuery = "INSERT INTO `items` (`name`, `name`) VALUES ('null', '" . $array[$i]->name . "')";
-			$setQuery = "INSERT INTO `items`(`name`, `current`, `median`, `market`, `volume`) VALUES ('" . str_replace("'", "\'", $item->name) . "','" . $item->curPrice . "','" . $item->medPrice . "','" . $item->taxPrice . "','" . $item->volume . "')";
-			$setResult = mysqli_query($sqlConn, $setQuery);
 		}
 	}
 
-	mysqli_close($sqlConn);
+	return false;
+}
+
+function addItemToDatabase($item, $host, $db, $user, $pass){
+	$sqlConn = new mysqli($host, $user, $pass, $db);
+	if($sqlConn->errno){
+		echo $sqlConn->error();
+	}
+
+	$update = true;
+	if(checkItemExistence($item, $sqlConn)){
+		echo 'Updating ' . $item->name . "<br />";
+		echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
+		$setQuery = "UPDATE items SET current=?, median=?, market=?, volume=? WHERE name=?";
+		$update = true;
+
+	}else{
+		echo 'Inserting ' . $item->name . "<br />";
+		echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
+		$setQuery = "INSERT INTO items(name, current, median, market, volume) VALUES (?, ?, ?, ?, ?)";
+		$update = false;
+	}
+
+	if($stmt = $sqlConn->prepare($setQuery)){
+		if($update){
+			$stmt->bind_param('sssss', $item->curPrice, $item->medPrice, $item->taxPrice, $item->volume, $item->name);
+		}else{
+			$stmt->bind_param('sssss', $item->name, $item->curPrice, $item->medPrice, $item->taxPrice, $item->volume);
+		}
+		if($stmt->execute()){
+			$stmt->close();
+			$sqlConn->close();
+			return true;
+		}
+		$stmt->close();
+	}
+
+	$sqlConn->close();
+	return false;
 }
 
 function grabItemValue($item){
