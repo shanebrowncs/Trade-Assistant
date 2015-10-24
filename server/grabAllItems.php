@@ -16,7 +16,7 @@
 function get_url_contents($url){
         $crl = curl_init();
         $timeout = 5;
-        curl_setopt ($crl, CURLOPT_URL,$url);
+        curl_setopt ($crl, CURLOPT_URL, $url);
         curl_setopt ($crl, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt ($crl, CURLOPT_CONNECTTIMEOUT, $timeout);
         $ret = curl_exec($crl);
@@ -27,26 +27,30 @@ function get_url_contents($url){
 function readMarketPage($pageNum){
 	echo 'Page Query: http://steamcommunity.com/market/search/render/?query=&start=' . $pageNum * 100 . '&count=100&search_descriptions=0&sort_column=name&sort_dir=asc&appid=730';
 
-	$json = json_decode(get_url_contents("http://steamcommunity.com/market/search/render/?query=&start=" . $pageNum * 100 . "&count=100&search_descriptions=0&sort_column=name&sort_dir=asc&appid=730"), true);
+	//$json = json_decode(get_url_contents("http://steamcommunity.com/market/search/render/?query=&start=" . $pageNum * 100 . "&count=100&search_descriptions=0&sort_column=name&sort_dir=asc&appid=730"), true);
 
-	while($json["success"] != true){
-		echo 'no success';
+	do{
+		echo 'attempting fetch';
 		$json = json_decode(get_url_contents("http://steamcommunity.com/market/search/render/?query=&start=" . $pageNum * 100 . "&count=100&search_descriptions=0&sort_column=name&sort_dir=asc&appid=730"), true);
-	}
+	}while($json["success"] != true);
+
+
+	$json['results_html'] = str_replace("\\t", "\t", $json['results_html']);
+	$json['results_html'] = str_replace("\\r\\n", "\n", $json['results_html']);
 
 	$dom = new DOMDocument;
 	$dom->loadHTML($json["results_html"]);
 
 	$dom->preserveWhiteSpace = false;
 
-	//echo $dom->saveHTML();
+	file_put_contents("output.html", $dom->saveHTML());
 
 	$itemResult = $dom->getElementById('result_0_name');
 
 	$itemArray = array();
 
 	if($itemResult === NULL){
-		echo "Couldn't get first element, num = " . $pageNum . "itemResult: " . $itemResult;
+		echo "Couldn't get first element, num = " . $pageNum . "<br />itemResult: " . $itemResult;
 		return false;
 	}
 

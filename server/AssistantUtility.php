@@ -23,14 +23,16 @@ class AssistantUtility{
             if($stmt = $sqlConn->prepare('SELECT * FROM `items` WHERE `name`=?')){
                 $stmt->bind_param('s', $item);
                 if($stmt->execute()){
-                    $result = $stmt->get_result();
+                    $result = $stmt->bind_result($name, $curPrice, $medPrice, $taxPrice, $volume);
+
+                    $stmt->fetch();
 
                     $obj = new stdClass();
-                    $row = $result->fetch_array(MYSQLI_NUM);
-        			$obj->curPrice = floatval($row[1]) * $currencyConversion;
-        			$obj->medPrice = floatval($row[2]) * $currencyConversion;
-        			$obj->taxPrice = floatval($row[3]) * $currencyConversion;
-        			$obj->volume = intval($row[4]);
+        			$obj->curPrice = floatval($curPrice) * $currencyConversion;
+        			$obj->medPrice = floatval($medPrice) * $currencyConversion;
+        			$obj->taxPrice = floatval($taxPrice) * $currencyConversion;
+        			$obj->volume = intval($volume);
+
 
                     $stmt->close();
                     $sqlConn->close();
@@ -39,9 +41,9 @@ class AssistantUtility{
                 $stmt->close();
             }
             $sqlConn->close();
-    	}else{
-    		return FALSE;
     	}
+
+        return FALSE;
     }
 
     public static function getCurrencyConversion($fromCurrency, $toCurrency){
