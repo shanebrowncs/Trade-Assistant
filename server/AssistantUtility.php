@@ -27,16 +27,18 @@ class AssistantUtility{
 
                     $stmt->fetch();
 
-                    $obj = new stdClass();
-        			$obj->curPrice = floatval($curPrice) * $currencyConversion;
-        			$obj->medPrice = floatval($medPrice) * $currencyConversion;
-        			$obj->taxPrice = floatval($taxPrice) * $currencyConversion;
-        			$obj->volume = intval($volume);
+                    if(!empty($name)){
+                        $obj = new stdClass();
+            			$obj->curPrice = floatval($curPrice) * $currencyConversion;
+            			$obj->medPrice = floatval($medPrice) * $currencyConversion;
+            			$obj->taxPrice = floatval($taxPrice) * $currencyConversion;
+            			$obj->volume = intval($volume);
 
 
-                    $stmt->close();
-                    $sqlConn->close();
-            		return $obj;
+                        $stmt->close();
+                        $sqlConn->close();
+                		return $obj;
+                    }
                 }
                 $stmt->close();
             }
