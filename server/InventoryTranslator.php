@@ -1,6 +1,6 @@
 <?php
 class InventoryTranslator{
-	function getSteamName($url){
+	public static function getSteamName($url){
 	    $data = file_get_contents($url . "?xml=1");
 	    $xml = simplexml_load_string($data);
 	    if($xml !== FALSE){
@@ -10,7 +10,7 @@ class InventoryTranslator{
 	    }
 	}
 
-	function retrieveInventory($steamID64){
+	public static function retrieveInventory($steamID64){
 		$data = file_get_contents("http://steamcommunity.com/profiles/" . $steamID64 . "/inventory/json/730/2");
 		$itemArray = array();
 	    if($data !== FALSE){
@@ -34,7 +34,7 @@ class InventoryTranslator{
 	    }
 	}
 
-	function getInventory($url){
+	public static function getInventory($url){
 		@$data = file_get_contents($url . "?xml=1");
 	    if($data !== FALSE){
 	    	$xml = simplexml_load_string($data);
