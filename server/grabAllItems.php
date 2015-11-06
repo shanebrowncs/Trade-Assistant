@@ -1,16 +1,3 @@
-<!DOCTYPE HTML>
-<html>
-
-<head>
-	<title>Title</title>
-</head>
-
-<body>
-
-</body>
-
-</html>
-
 <?php
 
 function get_url_contents($url){
@@ -39,27 +26,30 @@ function readMarketPage($pageNum){
 	$json['results_html'] = str_replace("\\r\\n", "\n", $json['results_html']);
 
 	$dom = new DOMDocument;
-	$dom->loadHTML($json["results_html"]);
+	@$dom->loadHTML($json["results_html"]);
 
 	$dom->preserveWhiteSpace = false;
 
 	file_put_contents("output.html", $dom->saveHTML());
 
-	$itemResult = $dom->getElementById('result_0_name');
+	$xpath = new DOMXPath($dom);
+
+	$nodes = $xpath->query("//a//div//span[contains(@id, 'result_0_name')]");
 
 	$itemArray = array();
 
-	if($itemResult === NULL){
-		echo "Couldn't get first element, num = " . $pageNum . "<br />itemResult: " . $itemResult;
+	if($nodes === NULL || count($nodes) <= 0){
+		echo "Couldn't get first element, num = " . $pageNum . "\nitemResult: " . $itemResult;
 		return false;
 	}
 
 	$secCount = 1;
 	while(true){
-		$itemResult = $dom->getElementById('result_' . $secCount . '_name');
-		if($itemResult != false){
-			$itemArray[] = utf8_decode($itemResult->nodeValue);
-			echo $itemArray[count($itemArray) - 1] . "<br />";
+		//$itemResult = $dom->getElementById('result_' . $secCount . '_name');
+		$itemResult = $xpath->query("//a//div//span[contains(@id, 'result_" . $secCount . "_name')]");
+		if($itemResult != false && count($itemResult) > 0 && isset($itemResult->item(0)->nodeValue)){
+			$itemArray[] = utf8_decode($itemResult->item(0)->nodeValue);
+			echo "Found " . $itemArray[count($itemArray) - 1] . "\n";
 			echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
 			$secCount++;
 		}else{
@@ -70,6 +60,7 @@ function readMarketPage($pageNum){
 	return $itemArray;
 }
 
+// TODO: Remove, redundant to AssistantUtility::fetchSqlData()
 function checkItemExistence($item, $sqlConn){
 	if($sqlConn->errno){
 		echo $sqlConn->error();
@@ -80,11 +71,11 @@ function checkItemExistence($item, $sqlConn){
 	if($stmt = $sqlConn->prepare($compQuery)){
 		$stmt->bind_param('s', $item->name);
 		if($stmt->execute()){
-			$result = $stmt->get_result();
+			//$result = $stmt->get_result();
+			$stmt->bind_result($name);
 
-			if(strcmp($result->fetch_array(MYSQLI_NUM)[0], $item->name) == 0){
+			if($stmt->fetch() === TRUE)
 				return true;
-			}
 		}
 	}
 
@@ -99,13 +90,13 @@ function addItemToDatabase($item, $host, $db, $user, $pass){
 
 	$update = true;
 	if(checkItemExistence($item, $sqlConn)){
-		echo 'Updating ' . $item->name . "<br />";
+		echo 'Updating ' . $item->name . "\n";
 		echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
 		$setQuery = "UPDATE items SET current=?, median=?, market=?, volume=? WHERE name=?";
 		$update = true;
 
 	}else{
-		echo 'Inserting ' . $item->name . "<br />";
+		echo 'Inserting ' . $item->name . "\n";
 		echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
 		$setQuery = "INSERT INTO items(name, current, median, market, volume) VALUES (?, ?, ?, ?, ?)";
 		$update = false;
@@ -132,8 +123,7 @@ function addItemToDatabase($item, $host, $db, $user, $pass){
 function grabItemValue($item){
 	$obj = new stdClass();
 	$obj->name = $item;
-	echo 'Grabbing Data for ' . $obj->name . "<br />";
-	echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
+	echo 'Grabbing Data for ' . $obj->name . "\n";
 	if(($itemJSON = TradeTranslator::getItemJSON($obj->name)) != FALSE){
 		$obj->curPrice = TradeTranslator::getItemCurrentPrice($itemJSON);
 		$obj->medPrice = TradeTranslator::getItemMedianPrice($itemJSON);
@@ -190,6 +180,6 @@ while(TRUE){
 
 	$count++;
 }
-echo "<br />Longest: " . $longestItem;
+echo "\nLongest: " . $longestItem;
 
 ?>

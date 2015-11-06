@@ -23,7 +23,7 @@ class AssistantUtility{
             if($stmt = $sqlConn->prepare('SELECT * FROM `items` WHERE `name`=?')){
                 $stmt->bind_param('s', $item);
                 if($stmt->execute()){
-                    $result = $stmt->bind_result($name, $curPrice, $medPrice, $taxPrice, $volume);
+                    $stmt->bind_result($name, $curPrice, $medPrice, $taxPrice, $volume);
 
                     $stmt->fetch();
 

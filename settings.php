@@ -1,3 +1,42 @@
+<?php
+
+/*
+USD = 1
+GBP = 2
+EUR = 3
+<NIL> = 4
+RUB = 5
+<NIL> = 6
+BRL = 7
+JPY = 8
+NOK = 9
+IDR = 10
+MYR = 11
+PHP = 12
+SGD = 13
+THB = 14
+<NIL> = 15
+<NIL> = 16
+TRY = 17
+<NIL> = 18
+MXN = 19
+CAD = 20
+<NIL> = 21
+NZD = 22*/
+
+if(isset($_POST['currency']) && !empty($_POST['currency'])){
+	setcookie("currency", $_POST['currency'], time() + (525949 * 60), './', FALSE); // NULL REQUIRED FOR LOCALHOST
+
+	if(isset($_POST['manualprice'])){
+		setcookie("manualprice", "true", time() + (525949 * 60), './', FALSE);
+	}else{
+		setcookie("manualprice", "false", time() + (525949 * 60), './', FALSE);
+	}
+
+
+}
+?>
+
 <!DOCTYPE HTML>
 <html>
 
@@ -58,39 +97,7 @@
 
 <?php
 
-/*
-USD = 1
-GBP = 2
-EUR = 3
-<NIL> = 4
-RUB = 5
-<NIL> = 6
-BRL = 7
-JPY = 8
-NOK = 9
-IDR = 10
-MYR = 11
-PHP = 12
-SGD = 13
-THB = 14
-<NIL> = 15
-<NIL> = 16
-TRY = 17
-<NIL> = 18
-MXN = 19
-CAD = 20
-<NIL> = 21
-NZD = 22*/
-
-if(isset($_POST['currency']) && !empty($_POST['currency'])){
-	setcookie("currency", $_POST['currency'], time() + (525949 * 60), './', FALSE); // NULL REQUIRED FOR LOCALHOST
-
-	if(isset($_POST['manualprice'])){
-		setcookie("manualprice", "true", time() + (525949 * 60), './', FALSE);
-	}else{
-		setcookie("manualprice", "false", time() + (525949 * 60), './', FALSE);
-	}
-
+if(isset($_POST['currency']) && !empty($_POST['currency']))
 	echo '<br/><br/>Submitted New Settings!';
-}
+
 ?>
