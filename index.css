@@ -9,4 +9,6 @@ h3{
 
 #textview{
 	width: 17em;
+	background-color: #333333;
+	border: 1px solid #444444;
 }

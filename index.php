@@ -31,7 +31,7 @@
 	<p id="credit">Created by <a href="http://shane-brown.ca/" target="_blank">Shane "SajeOne" Brown</a><br /></p>
 
 	<form>
-		<p>Enter Trade or Inventory URL:</p><br />
+		<p>Enter CSGOLounge Trade or Inventory URL:</p><br />
 		<input id="textview" type="text" name="url"/>
 		<br />
 		<input type="submit" value="Fetch Data"/>
