@@ -74,13 +74,13 @@ if(isset($_POST['currency']) && !empty($_POST['currency'])){
 
 	<form id="settingsform" action="" method="POST">
 		<label for="currency">Currency: </label><br />
-		<select name="currency" form="settingsform">
-			<option value="USD" <?php if(isset($_COOKIE['currency']) && $_COOKIE['currency'] == "USD") echo "selected"; ?>>USD</option>
-			<option value="CAD" <?php if(isset($_COOKIE['currency']) && $_COOKIE['currency'] == "CAD") echo "selected"; ?>>CAD</option>
-			<option value="GBP" <?php if(isset($_COOKIE['currency']) && $_COOKIE['currency'] == "GBP") echo "selected"; ?>>GBP</option>
-			<option value="EUR" <?php if(isset($_COOKIE['currency']) && $_COOKIE['currency'] == "EUR") echo "selected"; ?>>EUR</option>
-			<option value="RUB" <?php if(isset($_COOKIE['currency']) && $_COOKIE['currency'] == "RUB") echo "selected"; ?>>RUB</option>
-			<option value="JPY" <?php if(isset($_COOKIE['currency']) && $_COOKIE['currency'] == "JPY") echo "selected"; ?>>JPY</option>
+		<select id="curID" name="currency" form="settingsform">
+			<option value="USD">USD</option>
+			<option value="CAD">CAD</option>
+			<option value="GBP">GBP</option>
+			<option value="EUR">EUR</option>
+			<option value="RUB">RUB</option>
+			<option value="JPY">JPY</option>
 		</select>
 		<br />
 		<label for="manualprice">Manual Price Grabbing: </label>
@@ -96,8 +96,9 @@ if(isset($_POST['currency']) && !empty($_POST['currency'])){
 </html>
 
 <?php
+echo '<script src="settings.js"></script>';
 
-if(isset($_POST['currency']) && !empty($_POST['currency']))
+if(isset($_POST['currency']) && !empty($_POST['currency'])){
 	echo '<br/><br/>Submitted New Settings!';
-
+}
 ?>
