@@ -84,7 +84,7 @@ if(isset($_POST['currency']) && !empty($_POST['currency'])){
 		</select>
 		<br />
 		<label for="manualprice">Manual Price Grabbing: </label>
-		<input type="checkbox" value="true" name="manualprice" <?php if(isset($_COOKIE['manualprice']) && $_COOKIE['manualprice'] == "true") echo "checked"; ?>/><br />
+		<input id="manualID" type="checkbox" value="true" name="manualprice" <?php if(isset($_COOKIE['manualprice']) && $_COOKIE['manualprice'] == "true") echo "checked"; ?>/><br />
 		<input type="submit" value="Update Settings" name="submit"/>
 	</form>
 

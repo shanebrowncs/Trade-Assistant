@@ -1,5 +1,4 @@
 function getIndexFromString(cur){
-    console.log("Cur is: " + cur);
     switch(cur){
         case "USD":
             return 0;
@@ -27,4 +26,9 @@ function getCookie(name) {
 
 $(document).ready(function(){
     document.getElementById("curID").selectedIndex = getIndexFromString(getCookie("currency"));
+
+    if(getCookie("manualprice").localeCompare("true") == 0)
+        document.getElementById("manualID").checked = true;
+    else
+        document.getElementById("manualID").checked = false;
 });
