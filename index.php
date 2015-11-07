@@ -272,7 +272,11 @@ if(isset($_GET['url'])){
 		$timestamp = new DateTime();
 		$timestamp->setTimestamp($unixTime);
 
-		echo '<center>Data Last Fetched at ' . $timestamp->format('g:i A \o\n l jS F Y') . ' ' . $timestamp->format('T') . '</center>';
+		$nowdate = new DateTime();
+
+		$interval = $timestamp->diff($nowdate);
+
+		echo '<center>Data Last Fetched at ' . $interval->format("%a Days %h Hours %i Minutes %S Seconds") . '</center>';
 	}
 }
 
