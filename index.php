@@ -31,7 +31,7 @@
 	<p id="credit">Created by <a href="http://shane-brown.ca/" target="_blank">Shane "SajeOne" Brown</a><br /></p>
 
 	<form>
-		<p>Enter CSGOLounge Trade or Inventory URL:</p><br />
+		<p>Enter CSGOLounge Trade or Steam Profile URL:</p><br />
 		<input id="textview" type="text" name="url"/>
 		<br />
 		<input type="submit" value="Fetch Data"/>
@@ -148,7 +148,7 @@ function handleInventory($url, $host, $db, $user, $pass, $currency, $currencyCon
 	$itemArray = InventoryTranslator::getInventory($url, $host, $db, $user, $pass);
 	$name = InventoryTranslator::getSteamName($url);
 	if($itemArray === FALSE){
-		echo 'Failed to fetch inventory';
+		echo 'Failed to fetch inventory, are you sure you used either a direct profile URL or CSGOLounge Trade URL?';
 		return;
 	}
 
@@ -237,7 +237,19 @@ if(isset($_GET['url'])){
 
 	if(strpos($url, "csgolounge.com/trade") !== FALSE){
 		handleTrade($url, $sqlData->host, $sqlData->db, $sqlData->user, $sqlData->pass, $currency, $currencyConversion, $manualPrice);
-	}else if(strpos($url, "steamcommunity.com")){
+	}else if(strpos($url, "steamcommunity.com/profiles/") !== FALSE){
+		$endIndex = AssistantUtility::findNthInstanceInString(str_replace("://", "aaa", $url), "/", 3);
+
+		if($endIndex !== FALSE)
+			$url = substr($url, 0, $endIndex + 1);
+
+		handleInventory($url, $sqlData->host, $sqlData->db, $sqlData->user, $sqlData->pass, $currency, $currencyConversion, $manualPrice);
+	}else if(strpos($url, "steamcommunity.com/id/") !== FALSE){
+		$endIndex = AssistantUtility::findNthInstanceInString(str_replace("://", "aaa", $url), "/", 3);
+
+		if($endIndex !== FALSE)
+			$url = substr($url, 0, $endIndex + 1);
+
 		handleInventory($url, $sqlData->host, $sqlData->db, $sqlData->user, $sqlData->pass, $currency, $currencyConversion, $manualPrice);
 	}else if(strpos($url, "csgolounge.com/profile")){
 		if(strlen($url) >= 50){

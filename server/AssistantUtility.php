@@ -75,6 +75,21 @@ class AssistantUtility{
         else
             return FALSE;
     }
+
+    public static function findNthInstanceInString($string, $needle, $instance){
+        $count = 0;
+        for($i = 0; $i < strlen($string); $i++){
+            if(strcmp($string[$i], $needle) === 0)
+                $count++;
+
+            if($count >= $instance){
+                return $i;
+            }
+
+        }
+
+        return FALSE;
+    }
 }
 
 /*

@@ -1,8 +1,8 @@
 <?php
 class InventoryTranslator{
 	public static function getSteamName($url){
-	    $data = file_get_contents($url . "?xml=1");
-	    $xml = simplexml_load_string($data);
+	    @$data = file_get_contents($url . "?xml=1");
+	    @$xml = simplexml_load_string($data);
 	    if($xml !== FALSE){
 	        return $xml->steamID;
 	    }else{
@@ -37,7 +37,7 @@ class InventoryTranslator{
 	public static function getInventory($url){
 		@$data = file_get_contents($url . "?xml=1");
 	    if($data !== FALSE){
-	    	$xml = simplexml_load_string($data);
+	    	@$xml = simplexml_load_string($data);
 	    	if($xml !== FALSE){
 	    		$steamID64 = $xml->steamID64;
 	    		return InventoryTranslator::retrieveInventory($steamID64);
