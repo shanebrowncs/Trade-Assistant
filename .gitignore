@@ -5,4 +5,4 @@ settings.ini.client
 .gitignore~
 *.bak
 .tags*
-/server/page.txt
+/server/*.txt

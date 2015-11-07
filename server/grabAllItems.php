@@ -185,6 +185,10 @@ while(TRUE){
 
 	if($temp === FALSE){
         file_put_contents("page.txt", "-1");
+
+        $nowDate = new DateTime();
+
+        file_put_contents("datetime.txt", $nowDate->getTimestamp());
 		break;
 	}
 

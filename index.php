@@ -257,10 +257,22 @@ if(isset($_GET['url'])){
 			handleInventory("http://steamcommunity.com/profiles/" . substr($url, $index), $sqlData->host, $sqlData->db, $sqlData->user, $sqlData->pass, $currency, $currencyConversion, $manualPrice);
 		}else{
 			echo 'Malformed URL';
+			return;
 		}
 
 	}else{
 		echo 'Malformed URL';
+		return;
+	}
+
+	@$timeFile = file_get_contents("server/datetime.txt");
+	if($timeFile != FALSE){
+		$unixTime = intval($timeFile);
+
+		$timestamp = new DateTime();
+		$timestamp->setTimestamp($unixTime);
+
+		echo '<center>Data Last Fetched at ' . $timestamp->format('g:i A \o\n l jS F Y') . ' ' . $timestamp->format('T') . '</center>';
 	}
 }
 
