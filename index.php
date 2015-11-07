@@ -276,7 +276,7 @@ if(isset($_GET['url'])){
 
 		$interval = $timestamp->diff($nowdate);
 
-		echo '<center>Data Last Fetched at ' . $interval->format("%a Days %h Hours %i Minutes %S Seconds") . '</center>';
+		echo '<center>Data Last Fetched ' . $interval->format("%a Days %h Hours %i Minutes %S Seconds") . ' Ago</center>';
 	}
 }
 
