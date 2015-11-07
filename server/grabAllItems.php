@@ -12,12 +12,14 @@ function get_url_contents($url){
 }
 
 function readMarketPage($pageNum){
-	echo 'Page Query: http://steamcommunity.com/market/search/render/?query=&start=' . $pageNum * 100 . '&count=100&search_descriptions=0&sort_column=name&sort_dir=asc&appid=730';
+    global $lineBreak;
+
+	echo 'Page Query: http://steamcommunity.com/market/search/render/?query=&start=' . $pageNum * 100 . '&count=100&search_descriptions=0&sort_column=name&sort_dir=asc&appid=730' . $lineBreak;
 
 	//$json = json_decode(get_url_contents("http://steamcommunity.com/market/search/render/?query=&start=" . $pageNum * 100 . "&count=100&search_descriptions=0&sort_column=name&sort_dir=asc&appid=730"), true);
 
 	do{
-		echo 'attempting fetch';
+		echo 'attempting fetch' . $lineBreak;
 		$json = json_decode(get_url_contents("http://steamcommunity.com/market/search/render/?query=&start=" . $pageNum * 100 . "&count=100&search_descriptions=0&sort_column=name&sort_dir=asc&appid=730"), true);
 	}while($json["success"] != true);
 
@@ -30,8 +32,6 @@ function readMarketPage($pageNum){
 
 	$dom->preserveWhiteSpace = false;
 
-	file_put_contents("output.html", $dom->saveHTML());
-
 	$xpath = new DOMXPath($dom);
 
 	$nodes = $xpath->query("//a//div//span[contains(@id, 'result_0_name')]");
@@ -39,7 +39,7 @@ function readMarketPage($pageNum){
 	$itemArray = array();
 
 	if($nodes === NULL || count($nodes) <= 0){
-		echo "Couldn't get first element, num = " . $pageNum . "\nitemResult: " . $itemResult;
+		echo "Couldn't get first element, num = " . $pageNum . $lineBreak . "itemResult: " . $itemResult . $lineBreak;
 		return false;
 	}
 
@@ -49,7 +49,7 @@ function readMarketPage($pageNum){
 		$itemResult = $xpath->query("//a//div//span[contains(@id, 'result_" . $secCount . "_name')]");
 		if($itemResult != false && count($itemResult) > 0 && isset($itemResult->item(0)->nodeValue)){
 			$itemArray[] = utf8_decode($itemResult->item(0)->nodeValue);
-			echo "Found " . $itemArray[count($itemArray) - 1] . "\n";
+			echo "Found " . $itemArray[count($itemArray) - 1] . $lineBreak;
 			echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
 			$secCount++;
 		}else{
@@ -83,6 +83,8 @@ function checkItemExistence($item, $sqlConn){
 }
 
 function addItemToDatabase($item, $host, $db, $user, $pass){
+    global $lineBreak;
+
 	$sqlConn = new mysqli($host, $user, $pass, $db);
 	if($sqlConn->errno){
 		echo $sqlConn->error();
@@ -90,13 +92,13 @@ function addItemToDatabase($item, $host, $db, $user, $pass){
 
 	$update = true;
 	if(checkItemExistence($item, $sqlConn)){
-		echo 'Updating ' . $item->name . "\n";
+		echo 'Updating ' . $item->name . $lineBreak;
 		echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
 		$setQuery = "UPDATE items SET current=?, median=?, market=?, volume=? WHERE name=?";
 		$update = true;
 
 	}else{
-		echo 'Inserting ' . $item->name . "\n";
+		echo 'Inserting ' . $item->name . $lineBreak;
 		echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
 		$setQuery = "INSERT INTO items(name, current, median, market, volume) VALUES (?, ?, ?, ?, ?)";
 		$update = false;
@@ -121,9 +123,10 @@ function addItemToDatabase($item, $host, $db, $user, $pass){
 }
 
 function grabItemValue($item){
+    global $lineBreak;
 	$obj = new stdClass();
 	$obj->name = $item;
-	echo 'Grabbing Data for ' . $obj->name . "\n";
+	echo 'Grabbing Data for ' . $obj->name . $lineBreak;;
 	if(($itemJSON = TradeTranslator::getItemJSON($obj->name)) != FALSE){
 		$obj->curPrice = TradeTranslator::getItemCurrentPrice($itemJSON);
 		$obj->medPrice = TradeTranslator::getItemMedianPrice($itemJSON);
@@ -162,12 +165,25 @@ if($sqlData === FALSE){
 
 $count = 0;
 
+@$fileContent = file_get_contents("page.txt");
+
+if($fileContent != false){
+    $count = intval($fileContent) + 1;
+    if($count == -1)
+        $count = 0;
+}
+
+
+
 //debug
+$lineBreak = "<br/>";
 $longestItem = 0;
 while(TRUE){
+    echo 'Page: ' . $count . $lineBreak;
 	$temp = readMarketPage($count);
 
 	if($temp === FALSE){
+        file_put_contents("page.txt", "-1");
 		break;
 	}
 
@@ -178,8 +194,10 @@ while(TRUE){
 		}
 	}
 
+    file_put_contents("page.txt", $count);
+
 	$count++;
 }
-echo "\nLongest: " . $longestItem;
+echo $lineBreak . "Longest: " . $longestItem;
 
 ?>
