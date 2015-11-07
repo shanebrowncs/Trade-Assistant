@@ -32,14 +32,15 @@ function readMarketPage($pageNum){
 
 	$dom->preserveWhiteSpace = false;
 
+
 	$xpath = new DOMXPath($dom);
 
 	$nodes = $xpath->query("//a//div//span[contains(@id, 'result_0_name')]");
 
 	$itemArray = array();
 
-	if($nodes === NULL || count($nodes) <= 0){
-		echo "Couldn't get first element, num = " . $pageNum . $lineBreak . "itemResult: " . $itemResult . $lineBreak;
+	if($nodes === NULL || $nodes->length <= 0){
+		echo "Couldn't get first element, num = " . $pageNum . $lineBreak;
 		return false;
 	}
 
