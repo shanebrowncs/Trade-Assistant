@@ -101,30 +101,36 @@
 
 
     // Hardcoded for now :/, can easily edit settings.ini
-    $db = "testtradedb";
+    $db = "tradeassist";
 
     if(!populateSQL($sqlConn, $db)){
         return;
     }
 
-    if(file_exists(".htaccess")){
-        echo '<p>You already have an htaccess file, we\'ll back it up before adding our permissions.</p>';
-        copy(".htaccess", ".htaccess.bak");
+    if(!file_exists("server/.htaccess")){
+        if(!file_put_contents("server/.htaccess", "Deny from all")){
+            echo "<p>ERROR: Couldn't write to server/.htaccess. Ensure non-owners have write permissions for this directory.</p>";
+            return;
+        }
+
+    }else{
+        if(strcmp(file_get_contents("server/.htaccess"), "Deny from all") != 0){
+            if(!file_put_contents("server/.htaccess", "Deny from all", FILE_APPEND)){
+                echo "<p>ERROR: Could not write to existing file server/.htaccess. Ensure non-owners have write permissions for this directory.</p>";
+                return;
+            }
+        }
+
     }
 
-    if(file_put_contents(".htaccess", "<files settings.ini>\norder allow,deny\ndeny from all\n</files>\n<files setup.php>\norder allow,deny\ndeny from all\n</files>")){
-        echo '<p>Written Permissions to .htaccess</p>';
+    if(file_put_contents("server/settings.ini", "[database]\nhost=" . $host . "\ndb=" . $db . "\nuser=" . $user . "\npass=" . $password)){
+        echo "<p>Written server/settings.ini file with database info. <b>Ensure to remove this file from public version control.</b></p>";
     }else{
-        echo "<p>Could not write to .htaccess. Ensure non-owners have write permissions to the current directory.</p>";
+        echo "<p>ERROR: Could not write to server/settings.ini. Ensure non-owners have write permissions for this directory.</p>";
         return;
     }
 
-    if(file_put_contents("settings.ini", "[database]\nhost=" . $host . "\ndb=" . $db . "\nuser=" . $user . "\npass=" . $password)){
-        echo "<p>Written settings.ini file with database info. <b>Ensure to remove this file from public version control.</b></p>";
-    }else{
-        echo "<p>Could not write to settings.ini. Ensure non-owners have write permissions to the current directory.</p>";
-        return;
-    }
+    echo "<p>Trade Assistant Successfully Setup.</p>";
+    unlink(__FILE__);
 
-    echo "<p>Success! You can now close this page and delete this file.</p>";
 ?>
