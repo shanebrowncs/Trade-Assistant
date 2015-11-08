@@ -1,7 +1,7 @@
 settings.ini
 settings.ini.server
 settings.ini.client
-.htaccess
+/.htaccess
 .gitignore~
 *.bak
 .tags*
