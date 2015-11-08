@@ -12,3 +12,10 @@ h3{
 	background-color: #333333;
 	border: 1px solid #444444;
 }
+
+table.sortable thead {
+    background-color:#eee;
+    color:#666666;
+    font-weight: bold;
+    cursor: default;
+}

@@ -2,17 +2,22 @@
 <html>
 
 <head>
+	<!-- SCRIPTS -->
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script src="js/sum.js"></script>
+	<script src="js/sorttable/sorttable.js"></script>
 
+	<!-- Links/Stylesheets -->
 	<link rel="stylesheet" type="text/css" href="layout.css">
 	<link rel="stylesheet" type="text/css" href="index.css" />
 	<link rel="icon" type="image/png" href="/images/favicon.png" />
 
+	<!-- Meta Data -->
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 	<meta content="utf-8" http-equiv="encoding">
 
+	<!-- Page Title -->
 	<title>Trade Assistant</title>
 </head>
 
@@ -51,8 +56,11 @@ function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConvers
 	$total = array(0.0, 0.0, 0.0, 0.0);
 
 	echo "<h2 id=\"trader\">Trader's Items:</h2>";
-	echo '<table id="left" style="width: 100%">';
-	echo '<tr><td>Item Name:</td><td>Current Price:</td><td>Median Price:</td><td>Market Worth:</td><td>Volume:</td></tr>';
+	echo '<table class="sortable" id="left" style="width: 100%">';
+	echo '<thead>';
+	echo '<tr><th>Item Name:</th><th>Current Price:</th><th>Median Price:</th><th>Market Worth:</th><th>Volume:</th></tr>';
+	echo '</thead>';
+	echo '<tbody>';
 	for($i = 0; $i < count($multiArray[0]); $i++){
 		$leftItem = AssistantUtility::fetchSqlData($multiArray[0][$i], $host, $db, $user, $pass, $currencyConversion);
 
@@ -89,14 +97,18 @@ function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConvers
 		echo '<tr><td>' . $multiArray[0][$i] . '</td><td>' . $currency . " " . number_format($leftItem->curPrice, 2) . '</td><td>' . $currency . " " . number_format($leftItem->medPrice, 2) . '</td><td>' . $currency . " " . number_format($leftItem->taxPrice, 2) . '</td><td>' . $leftItem->volume . '</td></tr>';
 	}
 	echo '<tr><td>Total:</td><td>' . $currency . " " . number_format($total[0], 2) . '</td><td>' . $currency . " " . number_format($total[1], 2) . '</td><td>' . $currency . " " . number_format($total[2], 2) . '</td><td>' . $total[3] . '</td></tr>';
+	echo '</tbody>';
 	echo '</table>';
 
 	$rightTotal = array(0.0, 0.0, 0.0, 0.0);
 
 	echo '<h2 id="requested">Requested Items:</h2>';
 
-	echo '<table id="right" style="width: 100%">';
-	echo '<tr><td>Item Name:</td><td>Current Price:</td><td>Median Price:</td><td>Market Worth:</td><td>Volume:</td></tr>';
+	echo '<table class="sortable" id="right" style="width: 100%">';
+	echo '<thead>';
+	echo '<tr><th>Item Name:</th><th>Current Price:</th><th>Median Price:</th><th>Market Worth:</th><th>Volume:</th></tr>';
+	echo '</thead>';
+	echo '<tbody>';
 	for($i = 0; $i < count($multiArray[1]); $i++){
 		$rightItem = AssistantUtility::fetchSqlData($multiArray[1][$i], $host, $db, $user, $pass, $currencyConversion);
 
@@ -131,7 +143,10 @@ function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConvers
 		$rightTotal[2] += $rightItem->taxPrice;
 		$rightTotal[3] += $rightItem->volume;
 	}
+	echo '<tfoot>';
 	echo '<tr><td>Total:</td><td>' . $currency . " " . number_format($rightTotal[0], 2) . '</td><td>' . $currency . " " . number_format($rightTotal[1], 2) . '</td><td>' . $currency . " " . number_format($rightTotal[2], 2) . '</td><td>' . $rightTotal[3] . '</td></tr>';
+	echo '</tfoot>';
+	echo '</tbody>';
 	echo '</table>';
 
 	if($rightTotal[0] < $total[0]){
@@ -141,6 +156,9 @@ function handleTrade($url, $host, $db, $user, $pass, $currency, $currencyConvers
 	}else{
 		echo '<h3>Trade Status: <p style="color: white;">Even Trade</p></h3>';
 	}
+
+	//echo '<script>sortable.makeSortable(document.getElementById("right"));</script>';
+	//echo '<script>sortable.makeSortable(document.getElementById("left"));</script>';
 }
 
 function handleInventory($url, $host, $db, $user, $pass, $currency, $currencyConversion, $manual){
@@ -158,8 +176,11 @@ function handleInventory($url, $host, $db, $user, $pass, $currency, $currencyCon
 	$total = array(0.0, 0.0, 0.0, 0.0);
 
 	echo "<h2 id=\"trader\">" . $name . "'s Inventory:</h2> <br />";
-	echo '<table id="left" style="width: 100%">';
-	echo '<tr><td>Item Name:</td><td>Current Price:</td><td>Median Price:</td><td>Market Worth:</td><td>Volume:</td></tr>';
+	echo '<table class="sortable" id="left" style="width: 100%">';
+	echo '<thead>';
+	echo '<tr><th>Item Name:</th><th>Current Price:</th><th>Median Price:</th><th>Market Worth:</th><th>Volume:</th></tr>';
+	echo '</thead>';
+	echo '<tbody>';
 	for($i = 0; $i < count($itemArray); $i++){
 		$item = AssistantUtility::fetchSqlData($itemArray[$i]->name, $host, $db, $user, $pass, $currencyConversion);
 
@@ -195,8 +216,13 @@ function handleInventory($url, $host, $db, $user, $pass, $currency, $currencyCon
 			$total[3] += $item->volume;
 		}
 	}
+	echo '<tfoot>';
 	echo '<tr><td>Total:</td><td>' . $currency . " " . number_format($total[0], 2) . '</td><td>' . $currency . " " . number_format($total[1], 2) . '</td><td>' . $currency . " " . number_format($total[2], 2) . '</td><td>' . $total[3] . '</td></tr>';
+	echo '</tfoot>';
+	echo '</tbody>';
 	echo '</table>';
+
+	//echo '<script>sortable.makeSortable(document.getElementById("left"));</script>';
 }
 
 

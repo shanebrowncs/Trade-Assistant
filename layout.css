@@ -50,11 +50,12 @@ table{
 	margin-bottom: 30px;
 }
 
-table td{
+table td, table th{
 	background-color: #303030;
 	width: 200px;
 	color: white;
 	padding: 3px 1px;
+    text-align: left;
 }
 
 table td.highlighted{
