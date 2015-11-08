@@ -4,8 +4,8 @@
 <head>
 	<!-- SCRIPTS -->
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<script src="js/sum.js"></script>
 	<script src="js/sorttable/sorttable.js"></script>
+	<script src="js/sum.js"></script>
 
 	<!-- Links/Stylesheets -->
 	<link rel="stylesheet" type="text/css" href="layout.css">
