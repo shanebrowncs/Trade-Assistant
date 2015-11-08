@@ -59,18 +59,14 @@
         // Select DB before creating table
         $sqlConn->select_db($db);
 
-        $tableQuery = "CREATE TABLE ? `items` ( `name` VARCHAR(50) NOT NULL , `current` DECIMAL(5, 2) NOT NULL , `median` DECIMAL(5, 2) NOT NULL , `market` DECIMAL(5, 2) NOT NULL , `volume` INT(11) NOT NULL )";
+        $tableQuery = "CREATE TABLE `items` ( `name` VARCHAR(50) NOT NULL , `current` DECIMAL(5, 2) NOT NULL , `median` DECIMAL(5, 2) NOT NULL , `market` DECIMAL(5, 2) NOT NULL , `volume` INT(11) NOT NULL )";
 
-        if($stmt = $sqlConn->prepare($tableQuery)){
-            $stmt->bind_param('s', $db);
-            if(!$stmt->execute()){
-                echo '<p>MySQL Error: ' . mysqli_error($sqlConn) . '</p>';
-                return false;
-            }
+        if(!$sqlConn->query($tableQuery)){
+            echo '<p>MySQL Error: ' . mysqli_error($sqlConn) . '</p>';
+            return false;
         }
 
         echo '<p>Table Created.</p>';
-
         return true;
     }
 
