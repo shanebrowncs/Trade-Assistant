@@ -46,7 +46,6 @@ function readMarketPage($pageNum){
 
 	$secCount = 1;
 	while(true){
-		//$itemResult = $dom->getElementById('result_' . $secCount . '_name');
 		$itemResult = $xpath->query("//a//div//span[contains(@id, 'result_" . $secCount . "_name')]");
 		if($itemResult != false && count($itemResult) > 0 && isset($itemResult->item(0)->nodeValue)){
 			$itemArray[] = utf8_decode($itemResult->item(0)->nodeValue);
@@ -61,7 +60,6 @@ function readMarketPage($pageNum){
 	return $itemArray;
 }
 
-// TODO: Remove, redundant to AssistantUtility::fetchSqlData()
 function checkItemExistence($item, $sqlConn){
 	if($sqlConn->errno){
 		echo $sqlConn->error();
@@ -94,13 +92,13 @@ function addItemToDatabase($item, $host, $db, $user, $pass){
 	$update = true;
 	if(checkItemExistence($item, $sqlConn)){
 		echo 'Updating ' . $item->name . $lineBreak;
-		echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
+		//echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>'; // ENABLE IF VIEWING IN WEB BROWSER
 		$setQuery = "UPDATE items SET current=?, median=?, market=?, volume=? WHERE name=?";
 		$update = true;
 
 	}else{
 		echo 'Inserting ' . $item->name . $lineBreak;
-		echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>';
+		//echo '<script>window.scrollTo(0,document.body.scrollHeight);</script>'; // ENABLE IF VIEWING IN WEB BROWSER
 		$setQuery = "INSERT INTO items(name, current, median, market, volume) VALUES (?, ?, ?, ?, ?)";
 		$update = false;
 	}
@@ -177,7 +175,7 @@ if($fileContent != false){
 
 
 //debug
-$lineBreak = "<br/>";
+$lineBreak = "\n";
 $longestItem = 0;
 while(TRUE){
     echo 'Page: ' . $count . $lineBreak;
