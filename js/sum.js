@@ -1,4 +1,5 @@
 function updateSum(table, add, amount, currency){
+	console.log("got to sum update");
 	if(table == "left"){
 		var sumLbl = document.getElementById("trader");
 		var orig = sumLbl.innerHTML.substring(0, sumLbl.innerHTML.indexOf(':') + 1);
@@ -40,14 +41,18 @@ function getCurrency(){
 	return cookie;
 }
 
-$(function () {
+window.onload = function () {
   var down = false;
+  console.log("Got here 3");
   $("#left td, #right td")
     .mousedown(function () {
       down = true;
+	  console.log("got here 2");
 	  var cookie = getCurrency();
       if($(this).html().substring(0, 3) == cookie){
+		  console.log("got here");
 	    $(this).toggleClass("highlighted");
+		console.log("pls");
 	    if($(this).hasClass("checked")){
 	    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(4).replace(",", "")), cookie);
 	    	$(this).removeClass("checked");
@@ -63,6 +68,7 @@ $(function () {
       if (down) {
 		var cookie = getCurrency();
         if($(this).html().substring(0, 3) == cookie){
+			console.log("got here 1");
 		    $(this).toggleClass("highlighted");
 		    if($(this).hasClass("checked")){
 		    	updateSum($(this).closest('table').attr('id'), false, parseFloat($(this).html().substring(4)), cookie);
@@ -80,4 +86,4 @@ $(function () {
     .mouseup(function () {
       down = false;
     });
-});
+}

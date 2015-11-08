@@ -154,7 +154,7 @@ $time_pre = microtime(true);
 
 $dataArray = array();
 
-$sqlData = AssistantUtility::readSettingsFile("../settings.ini");
+$sqlData = AssistantUtility::readSettingsFile();
 if($sqlData === FALSE){
 	$sqlData = new stdClass();
 

@@ -1,8 +1,8 @@
 <?php
 
 class AssistantUtility{
-    public static function readSettingsFile($filePath){
-    	if((@$settings = parse_ini_file($filePath, TRUE)) === FALSE) {
+    public static function readSettingsFile(){
+    	if((@$settings = parse_ini_file("settings.ini", TRUE)) === FALSE) {
     		$data = FALSE;
     	}else{
     		$data = new stdClass();

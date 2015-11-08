@@ -20,7 +20,6 @@
 	<div id="navbar">
 		<a href="help.html">How To / Info</a>
 		<a href="settings.php">Settings</a>
-		<a href="calculator.html">Item Calculator</a>
 		<a href="index.php">Home</a>
 	</div>
 
@@ -208,7 +207,7 @@ require 'server/InventoryTranslator.php';
 require 'server/TradeTranslator.php';
 require 'server/AssistantUtility.php';
 
-$sqlData = AssistantUtility::readSettingsFile("settings.ini");
+$sqlData = AssistantUtility::readSettingsFile();
 if($sqlData === FALSE){
 	$sqlData = new stdClass();
 

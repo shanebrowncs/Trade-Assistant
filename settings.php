@@ -42,7 +42,6 @@ if(isset($_POST['currency']) && !empty($_POST['currency'])){
 
 <head>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<script src="index.js"></script>
 	<link rel="stylesheet" type="text/css" href="layout.css" />
 	<link rel="stylesheet" type="text/css" href="settings.css" />
 	<link rel="icon" type="image/png" href="/images/favicon.png" />
@@ -59,7 +58,6 @@ if(isset($_POST['currency']) && !empty($_POST['currency'])){
 	<div id="navbar">
 		<a href="help.html">How To / Info</a>
 		<a href="settings.php">Settings</a>
-		<a href="calculator.html">Item Calculator</a>
 		<a href="index.php">Home</a>
 	</div>
 
@@ -96,7 +94,7 @@ if(isset($_POST['currency']) && !empty($_POST['currency'])){
 </html>
 
 <?php
-echo '<script src="settings.js"></script>';
+echo '<script src="js/settings.js"></script>';
 
 if(isset($_POST['currency']) && !empty($_POST['currency'])){
 	echo '<br/><br/>Submitted New Settings!';
