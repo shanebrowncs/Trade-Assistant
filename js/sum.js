@@ -37,7 +37,10 @@ function updateSum(table, add, amount, currency){
 function getCurrency(){
 	var cookies = document.cookie.split(";");
 	var cookie = cookies[0].replace("currency=", "");
-	return cookie;
+	if(cookie.length != 3)
+		return "USD";
+	else
+		return cookie;
 }
 
 window.onload = function () {
