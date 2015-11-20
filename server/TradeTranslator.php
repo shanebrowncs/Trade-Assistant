@@ -1,7 +1,7 @@
 <?php
 class TradeTranslator{
 	public static function getTrade($url){
-		$data = file_get_contents(str_replace("https", "http", $url));
+		$data = AssistantUtility::fetchWebPage(str_replace("https", "http", $url));
 
 		if($data !== FALSE){
 			@$dom = new DomDocument();
@@ -31,7 +31,7 @@ class TradeTranslator{
 
 	public static function getItemJSON($item){
 		$item = str_replace(" ", "%20", $item);
-		@$raw = file_get_contents("http://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name=" . $item);
+		$raw = AssistantUtility::fetchWebPage("http://steamcommunity.com/market/priceoverview/?country=US&currency=1&appid=730&market_hash_name=" . $item);
 		if($raw === FALSE){
 			return FALSE;
 		}

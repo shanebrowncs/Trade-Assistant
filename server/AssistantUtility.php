@@ -90,6 +90,11 @@ class AssistantUtility{
 
         return FALSE;
     }
+
+    public static function fetchWebPage($url){
+        @$result = file_get_contents($url);
+        return $result;
+    }
 }
 
 /*
